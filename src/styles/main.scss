@@ -73,6 +73,7 @@ body {
   background: rgba(0, 0, 0, 0.75);
 
   &.__show {
+    pointer-events: all;
     opacity: 1;
   }
 }

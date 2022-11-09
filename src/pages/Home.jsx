@@ -3,11 +3,10 @@ import { useSearchParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import Rolldate from 'pickerjs';
 import City from '../images/city.png';
-import Car from '../images/car_1.png';
-import { Order } from '../components/Order';
-import { API_URL, apiFetchGet, apiFetchPost } from '../api/api';
+import { leadZero } from '../helpers/functions';
 
-const DATE_FORMAT = 'YYYY-MM-DD HH:mm';
+import { Order } from '../components/Order';
+import { API_URL, apiFetchGet, apiFetchPost, DATE_FORMAT, fixtures, MEDIA_URL } from '../api/api';
 
 let rtPicker = null;
 
@@ -20,7 +19,7 @@ export const Home = () => {
   const [openOrder, setOpenOrder] = useState(true);
   const [openSubmissionTime, setOpenSubmissionTime] = useState(false);
   const [submissionDate, setSubmissionDate] = useState(now);
-  const [parkingData, setParkingData] = useState(null);
+  const [parkingData, setParkingData] = useState(fixtures);
   let [searchParams, setSearchParams] = useSearchParams();
 
   const sendBookRequest = () => {
@@ -35,21 +34,22 @@ export const Home = () => {
 
   useEffect(() => {
     // eslint-disable-next-line no-console
-    console.log('searchParams', Object.fromEntries(searchParams));
+    console.log('searchParams', Object.fromEntries(searchParams), parkingData);
 
     const P = searchParams.get('P');
     const VCID = searchParams.get('VCID');
     const PCID = searchParams.get('PCID');
 
     if (P && VCID) {
-      apiFetchGet('get/?id=' + VCID + '&P=' + P).then((d) => {
-        // eslint-disable-next-line no-console
-        console.log('fetch', d);
-
-        setParkingData(d);
-      });
+      // todo
+      //apiFetchGet('get/?id=' + VCID + '&P=' + P).then((d) => {
+      //  // eslint-disable-next-line no-console
+      //  console.log('fetch', d);
+      //
+      //  setParkingData(d);
+      //});
     }
-  }, [searchParams]);
+  }, [searchParams, parkingData]);
 
   useEffect(() => {
     // eslint-disable-next-line no-console
@@ -63,8 +63,6 @@ export const Home = () => {
 
   useEffect(() => {
     const targetTime = dayjs().add(1, 'hour');
-    // eslint-disable-next-line no-console
-    console.log('rollTimeRef', pickerInputRef, targetTime.format(DATE_FORMAT));
 
     const lang = {
       title: '',
@@ -130,10 +128,34 @@ export const Home = () => {
     }
   }, [openTimePicker]);
 
-  const dateDiff = useMemo(
-    () => (submissionDate ? submissionDate.diff(now.format('YYYY-MM-DD'), 'day') : -1),
-    [submissionDate, now],
-  );
+  const parkDuration = useMemo(() => {
+    const parkStart = parkingData?.started_at ? dayjs(parkingData.started_at) : '';
+
+    if (!parkStart) return '';
+
+    const now = dayjs();
+
+    const addVal = (val, str) => (val > 0 ? val + str + ' ' : '');
+
+    const years = parkStart.diff(now, 'y'),
+      months = years * 12 - parkStart.diff(now, 'M'),
+      days = years * 365 - parkStart.diff(now, 'd') - months * 30,
+      hours = years * 365 * 24 - parkStart.diff(now, 'h') - days * 24 - months * 30 * 24,
+      minutes =
+        years * 365 * 24 * 60 -
+        parkStart.diff(now, 'm') -
+        hours * 60 -
+        days * 24 * 60 -
+        months * 30 * 24 * 60;
+
+    return (
+      addVal(years, 'л') +
+      addVal(months, 'м') +
+      addVal(days, 'д') +
+      addVal(hours, 'ч') +
+      addVal(minutes, 'мин')
+    );
+  }, [parkingData]);
 
   return (
     <>
@@ -149,23 +171,36 @@ export const Home = () => {
             (openOrder ? ' __open' : '') +
             (openSubmissionTime || openTimePicker ? ' __overlay' : '')
           }
+          onClick={(e) => {
+            if (e.target?.classList?.contains('__overlay')) {
+              setOpenSubmissionTime(false);
+              setOpenTimePicker(false);
+            }
+          }}
         >
           <div className="order">
             <div className="order-top">
-              <div className="title">Жилой Квартал Prime Park</div>
-              <div className="text">Трубная площадь, 2</div>
+              <div className="title">{parkingData?.parking?.name}</div>
+              <div className="text">{parkingData?.parking?.address}</div>
             </div>
 
             <div className="order-container">
               <Order
-                number={'Х349НО178'}
-                model={'BMW'}
-                image={Car}
-                parkTime={'25 Д. 4 Ч. 39 МИН.'}
-                parkPlace={'-1 этаж, D29'}
-                price={'400 ₽'}
-                startTime={'03.08.2020 в 13:30'}
-                valetCard={'221331242442'}
+                parkingData={parkingData}
+                number={parkingData?.car_number || ''}
+                model={parkingData?.car_model || ''}
+                image={
+                  MEDIA_URL + (parkingData?.photos?.length ? parkingData.photos[0]?.img || '' : '')
+                }
+                parkTime={parkDuration}
+                parkPlace={parkingData?.parking_place || ''}
+                price={(parkingData?.debt || '0.00') + ' ₽'}
+                startTime={
+                  parkingData?.started_at
+                    ? dayjs(parkingData.started_at).format('DD.MM.YYYY в HH:mm')
+                    : ''
+                }
+                valetCard={parkingData?.parking_card || ''}
               />
             </div>
 
@@ -306,6 +341,12 @@ export const Home = () => {
       </div>
       <div
         className={'overlay ' + (openTimePicker || openOrder || openSubmissionTime ? '__show' : '')}
+        onClick={(e) => {
+          if (e.target?.classList?.contains('__show')) {
+            setOpenSubmissionTime(false);
+            setOpenTimePicker(false);
+          }
+        }}
       />
     </>
   );

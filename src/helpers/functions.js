@@ -8,3 +8,7 @@ export function debounce(fn, ms) {
     }, ms);
   };
 }
+
+export const leadZero = (val) => {
+  return String('0' + val).slice(-2);
+};

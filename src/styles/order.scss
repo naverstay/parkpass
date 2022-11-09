@@ -16,7 +16,7 @@
     position: sticky;
     top: 0;
     background: #08198b;
-    padding: 18px 0;
+    padding: 18px 16px;
   }
 
   &-container {
@@ -89,6 +89,15 @@
 
     &__car {
       grid-area: image;
+      height: 80px;
+      position: relative;
+      overflow: hidden;
+
+      img {
+        @include img_center();
+        max-width: 200px;
+        max-height: 200px;
+      }
     }
 
     &__model {
