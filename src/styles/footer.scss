@@ -6,6 +6,9 @@
   left: 0;
   max-width: var(--app-width);
   margin: 0 auto;
+  display: flex;
+  flex-flow: column-reverse;
+  justify-content: stretch;
 
   .title {
     font-weight: 700;
@@ -29,6 +32,27 @@
     overflow: hidden;
     transition: transform .3s;
     transform: translateY(calc(100% + 100px));
+
+    &::before {
+      transition: opacity .3s;
+      content: '';
+      z-index: 3;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      opacity: 0;
+      pointer-events: none;
+      background: rgba(0, 0, 0, 0.75);
+    }
+
+    &.__overlay {
+      &::before {
+        pointer-events: all;
+        opacity: 1;
+      }
+    }
 
     &.__open {
       transform: translateY(0);

@@ -5,13 +5,113 @@
     padding: 18px 0;
   }
 
+  &-time {
+
+    input {
+      position: absolute;
+    }
+  }
+
   &-picker {
+
+    .picker-list {
+      margin: -6.5rem 0 -6.5rem;
+    }
+
+    .picker-grid {
+      //display: flex;
+      //flex-flow: row nowrap;
+      //justify-content: space-around;
+    }
+
+    .picker-cell {
+      border-left: 0;
+      //flex: 1 1 100%;
+
+      &::after {
+        margin-top: 2rem;
+      }
+
+      &::before {
+        margin-bottom: 2rem;
+      }
+
+      &::after,
+      &::before {
+        background: rgba(243, 243, 243, 0.9);
+      }
+
+      &.picker-years {
+
+        .picker-cell__body {
+          margin-right: -20px;
+          z-index: 2;
+        }
+
+      }
+
+
+      &.picker-days {
+
+        .picker-cell__body {
+          margin-right: -30px;
+          z-index: 2;
+        }
+
+      }
+
+      &.picker-months {
+
+        .picker-cell__body {
+          margin-right: -40px;
+        }
+
+      }
+    }
+
+    .picker-body {
+      position: relative;
+
+
+    }
+
+    .picker-item {
+      height: 74px;
+      font: 700 56px/1 $SFProDisplay;
+      text-align: center;
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
     #rolldate-year {
       min-width: 19vw;
     }
 
+    &.__today,
+    &.__tomorrow,
     &.__time {
+
+      .picker-body {
+        &::before {
+          z-index: 10;
+          content: ':';
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          margin-top: -8px;
+          transform: translate(-50%, -50%);
+          font: 700 64px / 24px $SFProDisplay;
+          color: #000;
+        }
+
+        .picker-days,
+        .picker-months,
+        .picker-years {
+          display: none;
+        }
+      }
 
       .rolldate-wrapper {
         position: relative;
@@ -47,6 +147,15 @@
     }
 
     &.__date {
+
+      .picker-body {
+
+        .picker-minutes,
+        .picker-hours {
+          display: none;
+        }
+
+      }
 
       .rolldate-wrapper {
         #rolldate-hour,
@@ -88,7 +197,8 @@
 
   &-time {
     position: relative;
-    min-height: 160px;
+    height: 164px;
+    overflow: hidden;
   }
 
   &-confirm {
