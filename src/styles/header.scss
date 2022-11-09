@@ -1,0 +1,22 @@
+.header {
+  height: 189px;
+  position: relative;
+
+  span {
+    z-index: 1;
+    position: absolute;
+    top: 11px;
+    left: 11px;
+    right: 11px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 9px;
+    line-height: 24px;
+    letter-spacing: 4px;
+    color: #fff;
+  }
+
+  img {
+    @include img_center()
+  }
+}

@@ -1,0 +1,45 @@
+.btn {
+  cursor: pointer;
+
+  &-green {
+    border: 0;
+    font: 700 20px / 24px $SFProDisplay;
+    text-align: center;
+    color: #fff;
+    background: #00d215;
+
+    &:hover {
+      background: #04bf17;
+    }
+  }
+
+  &-transp {
+    border: 0;
+    font: 700 16px / 19px $SFProDisplay;
+    text-align: center;
+    letter-spacing: 0.5px;
+    color: #7a7a7a;
+
+    &.__active,
+    &:hover {
+      background: #04bf17;
+      color: #fff;
+    }
+  }
+
+  &-blue {
+    border: 0;
+    font: 700 16px / 19px $SFProDisplay;
+    text-align: center;
+    letter-spacing: 0.5px;
+    background: #0731F4;
+    color: #fff;
+
+    &.__active,
+    &:hover {
+      background: #0426c5;
+    }
+  }
+
+}
+

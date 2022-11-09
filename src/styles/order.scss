@@ -1,0 +1,26 @@
+.order {
+  background: linear-gradient(180.05deg, #081a90 -4.3%, #000a4e 99.96%);
+  box-shadow: 0px -5px 50px rgba(0, 0, 0, 0.75);
+
+  &-top {
+    position: sticky;
+    top: 0;
+    background: #08198b;
+  }
+
+  .title {
+    color: #fff;
+  }
+
+  .text {
+    color: rgba(255, 255, 255, .5);
+  }
+
+  &-date {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: space-around;
+  }
+
+}

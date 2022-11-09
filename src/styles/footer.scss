@@ -1,0 +1,38 @@
+.footer {
+  z-index: 2;
+  position: fixed;
+  top: 100%;
+  right: 0;
+  left: 0;
+  max-width: 414px;
+  margin: 0 auto;
+
+  .title {
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+    text-align: center;
+  }
+
+  .text {
+    font-size: 14px;
+    line-height: 24px;
+    text-align: center;
+  }
+
+  &-container {
+    bottom: 0;
+    right: 0;
+    left: 0;
+    position: absolute;
+    border-radius: 20px 20px 0 0;
+    overflow: hidden;
+    transition: transform .3s;
+    transform: translateY(calc(100% + 100px));
+
+    &.__open {
+      transform: translateY(0);
+    }
+  }
+
+}
