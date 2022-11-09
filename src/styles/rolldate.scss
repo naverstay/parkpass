@@ -1,7 +1,5 @@
 .rolldate-container {
-  font-size: 20px;
-  color: #333;
-  text-align: center
+  text-align: center;
 }
 
 .rolldate-container ul {
@@ -14,10 +12,10 @@
 }
 
 .rolldate-container header {
+  @extend .submission-confirm;
+  order: 1;
   position: relative;
-  line-height: 60px;
-  font-size: 18px;
-  border-bottom: 1px solid #e0e0e0
+  z-index: 11;
 }
 
 .rolldate-container .rolldate-mask {
@@ -27,45 +25,41 @@
   top: 0;
   left: 0;
   z-index: 999;
+  display: none;
   background-color: rgba(37, 38, 45, .4)
 }
 
 .rolldate-container .rolldate-panel {
-  position: fixed;
-  bottom: 0;
-  left: 0;
+  position: relative;
+  flex-flow: column nowrap;
+  display: flex;
+  //bottom: 0;
+  //left: 0;
   width: 100%;
   height: 273px;
-  z-index: 1000;
-  background: #fff;
-  -webkit-transition: all .3s ease-in-out;
-  -o-transition: all .3s ease-in-out;
-  transition: all .3s ease-in-out;
-  -webkit-transform: translate3d(0, 273px, 0);
-  transform: translate3d(0, 273px, 0)
+  //z-index: 1000;
+  //background: #fff;
+  //-webkit-transition: all .3s ease-in-out;
+  //-o-transition: all .3s ease-in-out;
+  //transition: all .3s ease-in-out;
+  //-webkit-transform: translate3d(0, 273px, 0);
+  //transform: translate3d(0, 273px, 0)
 }
 
 .rolldate-container .rolldate-btn {
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  padding: 0 15px;
-  color: #666;
-  font-size: 16px;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent
+  @extend .btn;
+}
+
+.rolldate-container .rolldate-cancel {
+  @extend .btn-blue;
 }
 
 .rolldate-container .rolldate-confirm {
-  left: auto;
-  right: 0;
-  color: #007bff
+  @extend .btn-green;
 }
 
 .rolldate-container .rolldate-content {
   position: relative;
-  top: 20px
 }
 
 .rolldate-container .rolldate-wrapper {
@@ -94,7 +88,10 @@
 }
 
 .rolldate-container .rolldate-wrapper li {
-  height: 36px
+  height: 80px;
+  font: 700 56px/38px $SFProDisplay;
+  text-align: center;
+  color: #000;
 }
 
 .rolldate-container .rolldate-dim {
@@ -102,7 +99,7 @@
   left: 0;
   top: 0;
   width: 100%;
-  height: 68px;
+  height: 50px;
   background: -o-linear-gradient(bottom, hsla(0, 0%, 100%, .4), hsla(0, 0%, 100%, .8));
   background: -webkit-gradient(linear, left bottom, left top, from(hsla(0, 0%, 100%, 0.4)), to(hsla(0, 0%, 100%, 0.8)));
   background: -o-linear-gradient(bottom, hsla(0, 0%, 100%, 0.4), hsla(0, 0%, 100%, 0.8));
@@ -124,13 +121,13 @@
 }
 
 .rolldate-container .fadeIn {
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0)
+  //-webkit-transform: translateZ(0);
+  //transform: translateZ(0)
 }
 
 .rolldate-container .fadeOut {
-  -webkit-transform: translate3d(0, 273px, 0);
-  transform: translate3d(0, 273px, 0)
+  //-webkit-transform: translate3d(0, 273px, 0);
+  //transform: translate3d(0, 273px, 0)
 }
 
 @media screen and (max-width: 414px) {

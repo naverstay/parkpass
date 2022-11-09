@@ -1,5 +1,6 @@
 .btn {
   cursor: pointer;
+  user-select: none;
 
   &-green {
     border: 0;

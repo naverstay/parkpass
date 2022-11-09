@@ -5,6 +5,64 @@
     padding: 18px 0;
   }
 
+  &-picker {
+
+    #rolldate-year {
+      min-width: 19vw;
+    }
+
+    &.__time {
+
+      .rolldate-wrapper {
+        position: relative;
+
+        &::before {
+          z-index: 10;
+          content: ':';
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          margin-top: -8px;
+          transform: translate(-50%, -50%);
+          font: 700 64px / 24px $SFProDisplay;
+          color: #000;
+        }
+
+        .picker-cell {
+          border-left: 0;
+        }
+
+        #rolldate-year,
+        #rolldate-month,
+        #rolldate-day {
+          position: absolute;
+          top: 0;
+          opacity: 0;
+          width: 0;
+          pointer-events: none;
+          overflow: hidden;
+          margin-left: -100vw;
+        }
+      }
+    }
+
+    &.__date {
+
+      .rolldate-wrapper {
+        #rolldate-hour,
+        #rolldate-min {
+          position: absolute;
+          top: 0;
+          opacity: 0;
+          width: 0;
+          pointer-events: none;
+          overflow: hidden;
+          margin-left: -100vw;
+        }
+      }
+    }
+  }
+
   .title {
     color: #000;
   }

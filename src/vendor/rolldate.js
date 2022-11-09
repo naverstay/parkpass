@@ -289,7 +289,7 @@
       function D() {}
 
       var k,
-        P,
+        PPPPicker,
         L,
         O,
         W,
@@ -581,7 +581,7 @@
         (k.prototype.disable = function () {
           this.enabled = !1;
         }),
-        ((P = A).prototype._start = function (t) {
+        ((PPPPicker = A).prototype._start = function (t) {
           var i = x[t.type];
           if (
             (1 === i || 0 === t.button) &&
@@ -614,7 +614,7 @@
               this.trigger('beforeScrollStart');
           }
         }),
-        (P.prototype._move = function (t) {
+        (PPPPicker.prototype._move = function (t) {
           if (this.enabled && !this.destroyed && x[t.type] === this.initiated) {
             this.options.preventDefault && t.preventDefault(),
               this.options.stopPropagation && t.stopPropagation();
@@ -712,7 +712,7 @@
             }
           }
         }),
-        (P.prototype._end = function (t) {
+        (PPPPicker.prototype._end = function (t) {
           if (this.enabled && !this.destroyed && x[t.type] === this.initiated) {
             (this.initiated = !1),
               this.options.preventDefault &&
@@ -846,7 +846,7 @@
               }
           }
         }),
-        (P.prototype._checkClick = function (t) {
+        (PPPPicker.prototype._checkClick = function (t) {
           var i,
             e,
             s,
@@ -905,7 +905,7 @@
             !0
           );
         }),
-        (P.prototype._resize = function () {
+        (PPPPicker.prototype._resize = function () {
           var t = this;
           this.enabled &&
             (s && (this.wrapper.scrollTop = 0),
@@ -914,7 +914,7 @@
               t.refresh();
             }, this.options.resizePolling)));
         }),
-        (P.prototype._startProbe = function () {
+        (PPPPicker.prototype._startProbe = function () {
           z(this.probeTimer),
             (this.probeTimer = H(function t() {
               var i = e.getComputedPosition();
@@ -923,7 +923,7 @@
             }));
           var e = this;
         }),
-        (P.prototype._transitionTime = function () {
+        (PPPPicker.prototype._transitionTime = function () {
           var t = 0 < arguments.length && void 0 !== arguments[0] ? arguments[0] : 0;
           if (((this.scrollerStyle[S.transitionDuration] = t + 'ms'), this.options.wheel))
             for (var i = 0; i < this.items.length; i++)
@@ -931,7 +931,7 @@
           if (this.indicators)
             for (var e = 0; e < this.indicators.length; e++) this.indicators[e].transitionTime(t);
         }),
-        (P.prototype._transitionTimingFunction = function (t) {
+        (PPPPicker.prototype._transitionTimingFunction = function (t) {
           if (((this.scrollerStyle[S.transitionTimingFunction] = t), this.options.wheel))
             for (var i = 0; i < this.items.length; i++)
               this.items[i].style[S.transitionTimingFunction] = t;
@@ -939,7 +939,7 @@
             for (var e = 0; e < this.indicators.length; e++)
               this.indicators[e].transitionTimingFunction(t);
         }),
-        (P.prototype._transitionEnd = function (t) {
+        (PPPPicker.prototype._transitionEnd = function (t) {
           t.target === this.scroller &&
             this.isInTransition &&
             (this._transitionTime(),
@@ -952,7 +952,7 @@
                   y: this.y,
                 })));
         }),
-        (P.prototype._translate = function (t, i, e) {
+        (PPPPicker.prototype._translate = function (t, i, e) {
           if (
             ((function (t, i) {
               if (!t) throw new Error('[BScroll] ' + i);
@@ -978,7 +978,7 @@
           if (((this.x = t), (this.y = i), this.setScale(e), this.indicators))
             for (var h = 0; h < this.indicators.length; h++) this.indicators[h].updatePosition();
         }),
-        (P.prototype._animate = function (r, h, a, l) {
+        (PPPPicker.prototype._animate = function (r, h, a, l) {
           var c = this,
             p = this.x,
             u = this.y,
@@ -1017,12 +1017,12 @@
                   });
             })();
         }),
-        (P.prototype.scrollBy = function (t, i) {
+        (PPPPicker.prototype.scrollBy = function (t, i) {
           var e = 2 < arguments.length && void 0 !== arguments[2] ? arguments[2] : 0,
             s = 3 < arguments.length && void 0 !== arguments[3] ? arguments[3] : M.bounce;
           (t = this.x + t), (i = this.y + i), this.scrollTo(t, i, e, s);
         }),
-        (P.prototype.scrollTo = function (t, i) {
+        (PPPPicker.prototype.scrollTo = function (t, i) {
           var e = 2 < arguments.length && void 0 !== arguments[2] ? arguments[2] : 0,
             s = 3 < arguments.length && void 0 !== arguments[3] ? arguments[3] : M.bounce;
           (this.x !== t || this.y !== i) &&
@@ -1052,7 +1052,7 @@
                     : (this.selectedIndex = Math.round(Math.abs(i / this.itemHeight)))))
               : this._animate(t, i, e, s.fn));
         }),
-        (P.prototype.scrollToElement = function (t, i, e, s, o) {
+        (PPPPicker.prototype.scrollToElement = function (t, i, e, s, o) {
           if (
             t &&
             ((t = t.nodeType ? t : this.scroller.querySelector(t)),
@@ -1081,7 +1081,7 @@
               this.scrollTo(n.left, n.top, i, o);
           }
         }),
-        (P.prototype.resetPosition = function () {
+        (PPPPicker.prototype.resetPosition = function () {
           var t = 0 < arguments.length && void 0 !== arguments[0] ? arguments[0] : 0,
             i = 1 < arguments.length && void 0 !== arguments[1] ? arguments[1] : M.bounce,
             e = this.x,
@@ -1098,7 +1098,7 @@
             (e !== this.x || o !== this.y) && (this.scrollTo(e, o, t, i), !0)
           );
         }),
-        (P.prototype.getComputedPosition = function () {
+        (PPPPicker.prototype.getComputedPosition = function () {
           var t = window.getComputedStyle(this.scroller, null),
             i = void 0,
             e = void 0;
@@ -1113,7 +1113,7 @@
             }
           );
         }),
-        (P.prototype.stop = function () {
+        (PPPPicker.prototype.stop = function () {
           if (this.options.useTransition && this.isInTransition) {
             (this.isInTransition = !1), z(this.probeTimer);
             var t = this.getComputedPosition();
@@ -1136,8 +1136,8 @@
               }),
               (this.stopFromTransition = !0));
         }),
-        (P.prototype.destroy = function () {
-          (this.destroyed = !0),
+        (PPPPicker.prototype.destroy = function () {
+          (this.destroyed = !0 && !this.options.alwaysOpen),
             this.trigger('destroy'),
             this.options.useTransition ? z(this.probeTimer) : z(this.animateTimer),
             this._removeDOMEvents(),
@@ -1368,7 +1368,7 @@
         opts: {
           //插件默认配置
           el: '',
-          parent: '',
+          container: '',
           format: 'YYYY-MM-DD',
           beginYear: 2000,
           endYear: 2100,
@@ -1412,7 +1412,7 @@
       var _this = this,
         data = _this.baseData(),
         config = _this.config,
-        parent = config.parent ? $(config.parent) : document.body,
+        container = config.container ? $(config.container) : document.body,
         domId = data.domId,
         FormatArr = config.format.split(/-|\/|\s|:/g),
         len = FormatArr.length,
@@ -1536,7 +1536,7 @@
       box.className = 'rolldate-container';
       box.innerHTML = $html;
 
-      parent.appendChild(box);
+      container.appendChild(box);
 
       _this.scroll = {};
 
@@ -1752,25 +1752,28 @@
     },
     destroy: function destroy(flag) {
       var _this = this,
-        config = _this.config;
+        config = _this.config,
+        container = config.container ? $(config.container) : document.body;
 
-      for (var i in _this.scroll) {
-        _this.scroll[i].destroy();
+      if (!config.alwaysOpen) {
+        for (var i in _this.scroll) {
+          _this.scroll[i].destroy();
+        }
+
+        if (flag && config.cancel) {
+          config.cancel.call(_this);
+        }
+
+        _this.tap($('.rolldate-mask'), 0);
+        _this.tap($('.rolldate-cancel'), 0);
+        _this.tap($('.rolldate-confirm'), 0);
+        setTimeout(function () {
+          var el = $('.rolldate-container');
+
+          if (el) container.removeChild(el);
+          el = null;
+        }, 300);
       }
-
-      if (flag && config.cancel) {
-        config.cancel.call(_this);
-      }
-
-      _this.tap($('.rolldate-mask'), 0);
-      _this.tap($('.rolldate-cancel'), 0);
-      _this.tap($('.rolldate-confirm'), 0);
-      setTimeout(function () {
-        var el = $('.rolldate-container');
-
-        if (el) document.body.removeChild(el);
-        el = null;
-      }, 300);
     },
     getSelected: function getSelected(scroll) {
       return $('#' + scroll.wrapper.id + ' li', 1)[scroll.getSelectedIndex()].innerText.replace(

@@ -1,11 +1,14 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import dayjs from 'dayjs';
 import Rolldate from '../vendor/rolldate';
 import { Home } from '../pages/Home';
 import { useWindowDimension } from '../hooks/useWindowDimension';
 import Sprite from '../images/webpack-logo.svg';
 import City from '../images/city.png';
 import '../styles/main.scss';
+
+let rtPicker = null;
 
 const appHeight = () => {
   // eslint-disable-next-line no-console
@@ -15,51 +18,46 @@ const appHeight = () => {
 };
 
 export const App = () => {
-  const rolldateRef = useRef(null);
+  const now = dayjs();
+  const tomorrow = now.add(1, 'day');
+  const pickerInputRef = useRef(null);
+  const rollDateRef = useRef(null);
   const windowSize = useWindowDimension().join(',');
+  const [pickerMode, setPickerMode] = useState('time');
+  const [submissionDate, setSubmissionDate] = useState(now);
 
   useEffect(() => {
     appHeight();
   }, [windowSize]);
 
   useEffect(() => {
-    const now = new Date();
-    const targetTime = new Date(now.setHours(now.getHours() + 1));
+    const targetTime = dayjs().add(1, 'hour');
     // eslint-disable-next-line no-console
-    console.log('rolldateRef', rolldateRef);
+    console.log('rollTimeRef', pickerInputRef, targetTime.format('YYYY-MM-DD HH:mm'));
 
     const lang = {
-      title: 'Время',
+      title: '',
       cancel: 'Отмена',
       confirm: 'Готово',
-      year: 'год',
-      month: 'мес',
-      day: 'день',
+      year: '',
+      month: '',
+      day: '',
       hour: '',
       min: '',
       sec: '',
     };
 
-    if (rolldateRef.current) {
-      let rr = new Rolldate({
-        el: rolldateRef.current,
-        parent: rolldateRef.current.parentElement,
-        lang,
-        format: 'hh:mm',
+    if (pickerInputRef.current && rollDateRef.current) {
+      rtPicker = new Rolldate({
+        el: pickerInputRef.current,
+        container: rollDateRef.current,
+        format: 'YYYY-MM-DD hh:mm',
         alwaysOpen: true,
         minStep: 5,
-        value:
-          targetTime.getFullYear() +
-          '-' +
-          (targetTime.getMonth() + 1) +
-          '-' +
-          targetTime.getDate() +
-          ' ' +
-          targetTime.getHours() +
-          ':' +
-          targetTime.getMinutes(),
-        beginYear: targetTime.getFullYear(),
-        endYear: now.getFullYear() + 1,
+        lang,
+        value: targetTime.format('YYYY-MM-DD HH:mm'),
+        beginYear: targetTime.format('YYYY'),
+        endYear: parseInt(targetTime.format('YYYY')) + 1,
         init: function (e) {
           // eslint-disable-next-line no-console
           console.log('init');
@@ -72,7 +70,7 @@ export const App = () => {
           // eslint-disable-next-line no-console
           console.log(date);
           // eslint-disable-next-line no-console
-          console.log('confirm');
+          console.log('confirm', date);
         },
         cancel: function () {
           // eslint-disable-next-line no-console
@@ -81,9 +79,15 @@ export const App = () => {
       });
 
       // eslint-disable-next-line no-console
-      console.log('Rolldate', rr);
+      //console.log('rollTimeRef', rtPicker);
+      pickerInputRef.current.click();
     }
   }, []);
+
+  const dateDiff = useMemo(
+    () => (submissionDate ? submissionDate.diff(now.format('YYYY-MM-DD'), 'day') : -1),
+    [submissionDate, now],
+  );
 
   return (
     <div className="page">
@@ -123,27 +127,46 @@ export const App = () => {
             </div>
 
             <div className="submission-date">
-              <div className="btn btn-transp">Сегодня</div>
-              <div className="btn btn-transp">Завтра</div>
-              <div className="btn btn-transp">Выбрать дату</div>
+              <div
+                className={'btn btn-transp ' + (dateDiff === 0 ? '__active' : '')}
+                onClick={() => {
+                  setPickerMode('time');
+                  setSubmissionDate(now);
+                }}
+              >
+                Сегодня
+              </div>
+              <div
+                className={'btn btn-transp ' + (dateDiff === 1 ? '__active' : '')}
+                onClick={() => {
+                  setPickerMode('time');
+                  setSubmissionDate(tomorrow);
+                }}
+              >
+                Завтра
+              </div>
+              <div
+                className={
+                  'btn btn-transp ' + (dateDiff > 1 || pickerMode === 'date' ? '__active' : '')
+                }
+                onClick={() => {
+                  setSubmissionDate('');
+                  setPickerMode('date');
+                }}
+              >
+                Выбрать дату
+              </div>
             </div>
-            <div className="submission-time">
+            <div className={'submission-time'}>
               <input
-                id="rolldate"
-                ref={rolldateRef}
+                id="rollTime"
+                ref={pickerInputRef}
                 readOnly
-                className="form-control"
+                className="hidden"
                 type="text"
                 placeholder="Выберите время"
               />
-            </div>
-            <div className="submission-confirm">
-              <button className="btn btn-blue">
-                <span>Отмена</span>
-              </button>
-              <button className="btn btn-green">
-                <span>Готово</span>
-              </button>
+              <div ref={rollDateRef} className={'submission-picker __' + pickerMode} />
             </div>
           </div>
         </div>

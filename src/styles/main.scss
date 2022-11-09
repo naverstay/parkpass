@@ -13,6 +13,7 @@
   --app-text-color: #444;
   --app-background-color: #fff;
   --app-height: 100vh;
+  --app-width: 414px;
   --sat: env(safe-area-inset-top);
   --sar: env(safe-area-inset-right);
   --sab: env(safe-area-inset-bottom);
@@ -34,7 +35,7 @@ body {
 
 .page {
   margin: 0 auto;
-  max-width: 414px;
+  max-width: var(--app-width);
   min-height: var(--app-height);
   display: flex;
   flex-flow: column nowrap;
@@ -56,6 +57,10 @@ body {
   &.__show {
     opacity: 1;
   }
+}
+
+.hidden {
+  display: none !important;
 }
 
 .__w-100 {
