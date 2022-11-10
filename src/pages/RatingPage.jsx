@@ -42,7 +42,9 @@ export const RatingPage = () => {
     <>
       <div className="header">
         <span>PARKPASS VALET SERVICE</span>
-        <img src={MEDIA_URL + (parkingData?.parking?.picture || '')} alt="" />
+        {parkingData?.parking?.picture ? (
+          <img src={MEDIA_URL + parkingData?.parking?.picture} alt="place" />
+        ) : null}
       </div>
 
       <div className="footer">
