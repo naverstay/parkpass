@@ -21,7 +21,7 @@ export const Home = () => {
   const [showOrderInfo, setShowOrderInfo] = useState(false);
   const [openSubmissionTime, setOpenSubmissionTime] = useState(false);
   const [submissionDate, setSubmissionDate] = useState(now);
-  const [parkingData, setParkingData] = useState(fixtures); // fixtures
+  const [parkingData, setParkingData] = useState(null); // fixtures
   let [searchParams, setSearchParams] = useSearchParams();
 
   const checkBookStatus = () => {
@@ -55,12 +55,12 @@ export const Home = () => {
 
     if (P && VCID) {
       // todo
-      //apiFetchGet('get/?id=' + VCID + '&P=' + P).then((d) => {
-      //  // eslint-disable-next-line no-console
-      //  console.log('fetch get', d);
-      //
-      //  setParkingData(d);
-      //});
+      apiFetchGet('get/?id=' + VCID + '&P=' + P).then((d) => {
+        // eslint-disable-next-line no-console
+        console.log('fetch get', d);
+
+        setParkingData(d);
+      });
     }
   }, [searchParams]);
 
@@ -229,7 +229,9 @@ export const Home = () => {
         </div>
       </div>
       <div
-        className={'overlay ' + (openTimePicker || openOrder || openSubmissionTime ? '__show' : '')}
+        className={
+          'overlay __show ' + (openTimePicker || openOrder || openSubmissionTime ? '__show' : '')
+        }
         onClick={(e) => {
           if (e.target?.classList?.contains('__show')) {
             setOpenSubmissionTime(false);
