@@ -9,6 +9,8 @@ import ArrowRight from '../ico/arrow_r.svg';
 import Card from '../ico/card.svg';
 import Clock from '../ico/clock.svg';
 import Info from '../ico/info.svg';
+import { SurveyPage } from '../pages/SurveyPage';
+import { RatingPage } from '../pages/RatingPage';
 
 const svgData = 'url("data:image/svg+xml,';
 
@@ -49,7 +51,9 @@ export const App = () => {
       <style>{css}</style>
       <BrowserRouter>
         <Routes>
-          <Route path="*" element={<Home />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/survey" element={<SurveyPage />} />
+          <Route path="/rating" element={<RatingPage />} />
         </Routes>
       </BrowserRouter>
     </div>

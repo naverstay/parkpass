@@ -44,3 +44,11 @@
 
 }
 
+.input {
+  display: block;
+
+  &-white {
+    color: #000;
+    background: #fff;
+  }
+}

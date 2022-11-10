@@ -1,22 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import dayjs from 'dayjs';
-import { dateDiff } from '../helpers/functions';
+import { MEDIA_URL } from '../api/api';
 import { ProgressBar } from './ProgressBar';
+import { dateDiff } from '../helpers/functions';
+import dayjs from 'dayjs';
+import { Link } from 'react-router-dom';
 
 let updateTimer;
 
-export const OrderInfo = ({ parkingData }) => {
-  const STATUSES = [
-    'Статус 1',
-    'Статус 2',
-    'Статус 3',
-    'Запрос в обработке',
-    'Статус 5',
-    'Статус 6',
-    'Статус 7',
-    'Статус 8',
-  ];
-  const submissionStatus = STATUSES[parkingData?.state || 0];
+export const Survey = ({ parkingData, setOpenRatings }) => {
+  const number = parkingData?.car_number || '';
+  const model = parkingData?.car_model || '';
+  const image =
+    MEDIA_URL +
+    '/api/media' +
+    (parkingData?.photos?.length ? parkingData.photos[0]?.img || '' : '');
+
   const submissionTime = parkingData?.car_delivery_time ? dayjs(parkingData.car_delivery_time) : '';
   const submissionStart = parkingData?.started_at ? dayjs(parkingData.started_at) : '';
   // eslint-disable-next-line no-console
@@ -38,21 +36,6 @@ export const OrderInfo = ({ parkingData }) => {
     };
   }, [submissionTime, submissionStart]);
 
-  useEffect(() => {
-    clearInterval(updateTimer);
-
-    updateTimer = setInterval(() => {
-      setNow(dayjs());
-    }, 1000);
-
-    return () => {
-      clearInterval(updateTimer);
-    };
-  }, []);
-
-  // eslint-disable-next-line no-console
-  console.log('submissionDuration', submissionDuration, submissionPeriod);
-
   return (
     <div className="order">
       <div className="order-top">
@@ -61,14 +44,18 @@ export const OrderInfo = ({ parkingData }) => {
       </div>
 
       <div className="order-container">
-        <div className="order-info">
-          <div className="order-info__item">
-            <p>Время подачи Авто:</p>
-            <div className="order-info__time">{submissionTime.format('HH:mm')}</div>
+        <div className="order-info__item">
+          <div className="order-survey__title">
+            Помогите нам стать лучше, <br /> пройдите небольшой опрос
           </div>
-          <div className="order-info__item">
-            <p>Статус подачи</p>
-            <div className="order-info__status">{submissionStatus}</div>
+
+          <div className="order-survey__buttons">
+            <Link to={'/'} className="btn btn-blue">
+              В следующий раз
+            </Link>
+            <Link to={'/rating'} className="btn btn-blue">
+              Да, давайте
+            </Link>
           </div>
         </div>
 
