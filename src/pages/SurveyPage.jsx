@@ -1,16 +1,13 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import dayjs from 'dayjs';
 import { API_URL, apiFetchGet, apiFetchPost, DATE_FORMAT, fixtures, MEDIA_URL } from '../api/api';
 import { Survey } from '../components/Survey';
-
-let rtPicker = null;
+import { NoData } from '../components/NoData';
 
 export const SurveyPage = () => {
-  const now = dayjs();
-
   const [openSurvey, setOpenSurvey] = useState(false);
   const [openRatings, setOpenRatings] = useState(false);
+  const [openNoData, setOpenNoData] = useState(false);
 
   const [parkingData, setParkingData] = useState(fixtures); // fixtures
   let [searchParams, setSearchParams] = useSearchParams();
@@ -25,12 +22,12 @@ export const SurveyPage = () => {
 
     if (P && VCID) {
       // todo
-      //apiFetchGet('get/?id=' + VCID + '&P=' + P).then((d) => {
-      //  // eslint-disable-next-line no-console
-      //  console.log('fetch get', d);
-      //
-      //  setParkingData(d);
-      //});
+      apiFetchGet('get/?id=' + VCID + '&P=' + P).then((d) => {
+        // eslint-disable-next-line no-console
+        console.log('fetch get', d);
+
+        setParkingData(d);
+      });
     }
   }, [searchParams]);
 
@@ -44,15 +41,21 @@ export const SurveyPage = () => {
     <>
       <div className="header">
         <span>PARKPASS VALET SERVICE</span>
-        <img src={MEDIA_URL + (parkingData?.parking?.picture || '')} alt="" />
+        {parkingData?.parking?.picture ? (
+          <img src={MEDIA_URL + parkingData?.parking?.picture} alt="place" />
+        ) : null}
       </div>
 
       <div className="footer">
+        <div className={'footer-container' + (openNoData ? ' __open' : '')}>
+          <NoData />
+        </div>
+
         <div
           className={'footer-container' + (openSurvey ? ' __open' : '')}
           onClick={(e) => {
             if (e.target?.classList?.contains('__overlay')) {
-              setOpenSurvey(false);
+              //setOpenSurvey(false);
             }
           }}
         >
@@ -65,7 +68,7 @@ export const SurveyPage = () => {
         className={'overlay ' + (openSurvey ? '__show' : '')}
         onClick={(e) => {
           if (e.target?.classList?.contains('__show')) {
-            setOpenSurvey(false);
+            //setOpenSurvey(false);
           }
         }}
       />

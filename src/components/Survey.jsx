@@ -7,21 +7,14 @@ import { Link } from 'react-router-dom';
 
 let updateTimer;
 
-export const Survey = ({ parkingData, setOpenRatings }) => {
-  const number = parkingData?.car_number || '';
-  const model = parkingData?.car_model || '';
-  const image =
-    MEDIA_URL +
-    '/api/media' +
-    (parkingData?.photos?.length ? parkingData.photos[0]?.img || '' : '');
-
+export const Survey = ({ parkingData }) => {
   const submissionTime = parkingData?.car_delivery_time ? dayjs(parkingData.car_delivery_time) : '';
   const submissionStart = parkingData?.started_at ? dayjs(parkingData.started_at) : '';
   // eslint-disable-next-line no-console
   console.log('parkingData', parkingData);
 
   const submissionPeriod = submissionTime.diff(submissionStart, 's');
-  const [submissionDuration, setSubmissionDuration] = useState(0);
+  const [submissionDuration, setSubmissionDuration] = useState(submissionTime.diff(dayjs(), 's'));
   const [now, setNow] = useState(dayjs());
 
   useEffect(() => {
@@ -35,6 +28,18 @@ export const Survey = ({ parkingData, setOpenRatings }) => {
       clearInterval(updateTimer);
     };
   }, [submissionTime, submissionStart]);
+
+  useEffect(() => {
+    clearInterval(updateTimer);
+
+    updateTimer = setInterval(() => {
+      setNow(dayjs());
+    }, 1000);
+
+    return () => {
+      clearInterval(updateTimer);
+    };
+  }, []);
 
   return (
     <div className="order">

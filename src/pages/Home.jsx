@@ -8,6 +8,7 @@ import { API_URL, apiFetchGet, apiFetchPost, DATE_FORMAT, fixtures, MEDIA_URL } 
 import { Sumbission } from '../components/Submission';
 import { SumbissionTime } from '../components/SubmissionTime';
 import { OrderInfo } from '../components/OrderInfo';
+import { NoData } from '../components/NoData';
 
 let rtPicker = null;
 
@@ -18,6 +19,7 @@ export const Home = () => {
   const [pickerMode, setPickerMode] = useState('today');
   const [openTimePicker, setOpenTimePicker] = useState(false);
   const [openOrder, setOpenOrder] = useState(false);
+  const [openNoData, setOpenNoData] = useState(false);
   const [showOrderInfo, setShowOrderInfo] = useState(false);
   const [openSubmissionTime, setOpenSubmissionTime] = useState(false);
   const [submissionDate, setSubmissionDate] = useState(now);
@@ -39,6 +41,7 @@ export const Home = () => {
       (r) => {
         // eslint-disable-next-line no-console
         console.log('sendBookRequest', r);
+        setParkingData(r);
 
         checkBookStatus();
       },
@@ -61,6 +64,8 @@ export const Home = () => {
 
         setParkingData(d);
       });
+    } else {
+      setOpenNoData(true);
     }
   }, [searchParams]);
 
@@ -76,7 +81,9 @@ export const Home = () => {
 
   useEffect(() => {
     if (parkingData) {
-      if (parkingData?.state === 3) {
+      setOpenNoData(false);
+
+      if (parkingData?.state === 4) {
         setShowOrderInfo(true);
       } else {
         setOpenOrder(true);
@@ -192,6 +199,10 @@ export const Home = () => {
           />
         </div>
 
+        <div className={'footer-container' + (openNoData ? ' __open' : '')}>
+          <NoData />
+        </div>
+
         <div className={'footer-container' + (openTimePicker ? ' __open' : '')}>
           <Sumbission
             pickerMode={pickerMode}
@@ -228,6 +239,7 @@ export const Home = () => {
           />
         </div>
       </div>
+
       <div
         className={'overlay ' + (openTimePicker || openOrder || openSubmissionTime ? '__show' : '')}
         onClick={(e) => {

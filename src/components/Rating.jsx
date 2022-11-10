@@ -1,20 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { MEDIA_URL } from '../api/api';
 import { ProgressBar } from './ProgressBar';
 import { dateDiff } from '../helpers/functions';
 import dayjs from 'dayjs';
-import { Link } from 'react-router-dom';
 
 let updateTimer;
 
-export const Rating = ({ parkingData, setOpenRatings }) => {
-  const number = parkingData?.car_number || '';
-  const model = parkingData?.car_model || '';
-  const image =
-    MEDIA_URL +
-    '/api/media' +
-    (parkingData?.photos?.length ? parkingData.photos[0]?.img || '' : '');
-
+export const Rating = ({ parkingData }) => {
   const submissionTime = parkingData?.car_delivery_time ? dayjs(parkingData.car_delivery_time) : '';
   const submissionStart = parkingData?.started_at ? dayjs(parkingData.started_at) : '';
   // eslint-disable-next-line no-console
@@ -100,7 +91,7 @@ export const Rating = ({ parkingData, setOpenRatings }) => {
             <div className="order-survey__title">Хотите что-то добавить?</div>
 
             <div className="order-survey__input">
-              <input className="input input-white" type="text" />
+              <input placeholder="Ваше сообщение здесь" className="input input-white" type="text" />
             </div>
 
             <div className="order-survey__buttons">
