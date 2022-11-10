@@ -5,6 +5,9 @@ import Rolldate from 'pickerjs';
 
 import { Order } from '../components/Order';
 import { API_URL, apiFetchGet, apiFetchPost, DATE_FORMAT, fixtures, MEDIA_URL } from '../api/api';
+import { Sumbission } from '../components/Submission';
+import { SumbissionTime } from '../components/SubmissionTime';
+import { OrderInfo } from '../components/OrderInfo';
 
 let rtPicker = null;
 
@@ -14,11 +17,21 @@ export const Home = () => {
   const rollDateRef = useRef(null);
   const [pickerMode, setPickerMode] = useState('today');
   const [openTimePicker, setOpenTimePicker] = useState(false);
-  const [openOrder, setOpenOrder] = useState(true);
+  const [openOrder, setOpenOrder] = useState(false);
+  const [showOrderInfo, setShowOrderInfo] = useState(false);
   const [openSubmissionTime, setOpenSubmissionTime] = useState(false);
   const [submissionDate, setSubmissionDate] = useState(now);
-  const [parkingData, setParkingData] = useState(fixtures);
+  const [parkingData, setParkingData] = useState(fixtures); // fixtures
   let [searchParams, setSearchParams] = useSearchParams();
+
+  const checkBookStatus = () => {
+    const VCID = searchParams.get('VCID');
+
+    apiFetchGet('status/?id=' + VCID).then((d) => {
+      // eslint-disable-next-line no-console
+      console.log('fetch status', d);
+    });
+  };
 
   const sendBookRequest = () => {
     const VCID = searchParams.get('VCID');
@@ -26,13 +39,15 @@ export const Home = () => {
       (r) => {
         // eslint-disable-next-line no-console
         console.log('sendBookRequest', r);
+
+        checkBookStatus();
       },
     );
   };
 
   useEffect(() => {
     // eslint-disable-next-line no-console
-    console.log('searchParams', Object.fromEntries(searchParams), parkingData);
+    console.log('searchParams', Object.fromEntries(searchParams));
 
     const P = searchParams.get('P');
     const VCID = searchParams.get('VCID');
@@ -42,12 +57,12 @@ export const Home = () => {
       // todo
       //apiFetchGet('get/?id=' + VCID + '&P=' + P).then((d) => {
       //  // eslint-disable-next-line no-console
-      //  console.log('fetch', d);
+      //  console.log('fetch get', d);
       //
       //  setParkingData(d);
       //});
     }
-  }, [searchParams, parkingData]);
+  }, [searchParams]);
 
   useEffect(() => {
     // eslint-disable-next-line no-console
@@ -58,6 +73,16 @@ export const Home = () => {
     );
     rtPicker?.setDate((submissionDate || dayjs()).format(DATE_FORMAT)).render();
   }, [submissionDate]);
+
+  useEffect(() => {
+    if (parkingData) {
+      if (parkingData?.state === 3) {
+        setShowOrderInfo(true);
+      } else {
+        setOpenOrder(true);
+      }
+    }
+  }, [parkingData]);
 
   useEffect(() => {
     const targetTime = dayjs().add(1, 'hour');
@@ -126,35 +151,6 @@ export const Home = () => {
     }
   }, [openTimePicker]);
 
-  const parkDuration = useMemo(() => {
-    const parkStart = parkingData?.started_at ? dayjs(parkingData.started_at) : '';
-
-    if (!parkStart) return '';
-
-    const now = dayjs();
-
-    const addVal = (val, str) => (val > 0 ? val + str + ' ' : '');
-
-    const years = parkStart.diff(now, 'y'),
-      months = years * 12 - parkStart.diff(now, 'M'),
-      days = years * 365 - parkStart.diff(now, 'd') - months * 30,
-      hours = years * 365 * 24 - parkStart.diff(now, 'h') - days * 24 - months * 30 * 24,
-      minutes =
-        years * 365 * 24 * 60 -
-        parkStart.diff(now, 'm') -
-        hours * 60 -
-        days * 24 * 60 -
-        months * 30 * 24 * 60;
-
-    return (
-      addVal(years, 'л') +
-      addVal(months, 'м') +
-      addVal(days, 'д') +
-      addVal(hours, 'ч') +
-      addVal(minutes, 'мин')
-    );
-  }, [parkingData]);
-
   return (
     <>
       <div className="header">
@@ -176,167 +172,60 @@ export const Home = () => {
             }
           }}
         >
-          <div className="order">
-            <div className="order-top">
-              <div className="title">{parkingData?.parking?.name}</div>
-              <div className="text">{parkingData?.parking?.address}</div>
-            </div>
+          {parkingData ? (
+            <Order parkingData={parkingData} setOpenSubmissionTime={setOpenSubmissionTime} />
+          ) : null}
+        </div>
 
-            <div className="order-container">
-              <Order
-                parkingData={parkingData}
-                number={parkingData?.car_number || ''}
-                model={parkingData?.car_model || ''}
-                image={
-                  MEDIA_URL +
-                  '/api/media' +
-                  (parkingData?.photos?.length ? parkingData.photos[0]?.img || '' : '')
-                }
-                parkTime={parkDuration}
-                parkPlace={parkingData?.parking_place || ''}
-                price={(parkingData?.debt || '0.00') + ' ₽'}
-                startTime={
-                  parkingData?.started_at
-                    ? dayjs(parkingData.started_at).format('DD.MM.YYYY в HH:mm')
-                    : ''
-                }
-                valetCard={parkingData?.parking_card || ''}
-              />
-            </div>
-
-            <div className="order-footer">
-              <button
-                className="btn btn-green"
-                onClick={() => {
-                  setOpenSubmissionTime(true);
-                }}
-              >
-                <span>Подать автомобиль</span>
-              </button>
-            </div>
-          </div>
+        <div className={'footer-container' + (showOrderInfo ? ' __open' : '')}>
+          {parkingData ? (
+            <OrderInfo setOpenTimePicker={setOpenTimePicker} parkingData={parkingData} />
+          ) : null}
         </div>
 
         <div className={'footer-container' + (openSubmissionTime ? ' __open' : '')}>
-          <div className="submission">
-            <div className="submission-top">
-              <div className="title">Время подачи?</div>
-              <div className="text">Минимальное время подачи 10 мин.</div>
-            </div>
-
-            <div className="submission-confirm">
-              <button
-                className="btn btn-blue"
-                onClick={() => {
-                  setOpenTimePicker(true);
-                  setOpenSubmissionTime(false);
-                }}
-              >
-                <span>Ко времени</span>
-              </button>
-              <button
-                className="btn btn-green"
-                onClick={() => {
-                  setOpenSubmissionTime(false);
-                  // eslint-disable-next-line no-console
-                  console.log('send request', rtPicker.getDate());
-
-                  sendBookRequest();
-                }}
-              >
-                <span>Сейчас</span>
-              </button>
-            </div>
-          </div>
+          <SumbissionTime
+            setOpenSubmissionTime={setOpenSubmissionTime}
+            setOpenTimePicker={setOpenTimePicker}
+            rtPicker={rtPicker}
+            sendBookRequest={sendBookRequest}
+          />
         </div>
 
         <div className={'footer-container' + (openTimePicker ? ' __open' : '')}>
-          <div className="submission">
-            <div className="submission-top">
-              <div className="title">Время подачи?</div>
-              <div className="text">Минимальное время подачи 10 мин.</div>
-            </div>
+          <Sumbission
+            pickerMode={pickerMode}
+            setPickerMode={setPickerMode}
+            setSubmissionDate={setSubmissionDate}
+            pickerInputRef={pickerInputRef}
+            setOpenTimePicker={setOpenTimePicker}
+            rtPicker={rtPicker}
+            rollDateRef={rollDateRef}
+            onSubmit={() => {
+              // eslint-disable-next-line no-console
 
-            <div className="submission-date">
-              <div
-                className={'btn btn-transp ' + (pickerMode === 'today' ? '__active' : '')}
-                onClick={() => {
-                  setPickerMode('today');
-                  setSubmissionDate(dayjs());
-                }}
-              >
-                Сегодня
-              </div>
-              <div
-                className={'btn btn-transp ' + (pickerMode === 'tomorrow' ? '__active' : '')}
-                onClick={() => {
-                  setPickerMode('tomorrow');
-                  setSubmissionDate(dayjs().add(1, 'd'));
-                }}
-              >
-                Завтра
-              </div>
-              <div
-                className={
-                  'btn btn-transp ' +
-                  (pickerMode === 'date' || pickerMode === 'time' ? '__active' : '')
-                }
-                onClick={() => {
-                  setSubmissionDate('');
-                  setPickerMode('date');
-                }}
-              >
-                Выбрать дату
-              </div>
-            </div>
-            <div className={'submission-time'}>
-              <input
-                ref={pickerInputRef}
-                defaultValue={now.format(DATE_FORMAT)}
-                className="hidden"
-                type="text"
-              />
-              <div ref={rollDateRef} className={'submission-picker __' + pickerMode} />
-            </div>
+              const time = dayjs();
+              const date = dayjs(rtPicker.getDate());
 
-            <div className="submission-confirm">
-              <button
-                className="btn btn-blue"
-                onClick={() => {
-                  setOpenTimePicker(false);
-                }}
-              >
-                <span>Отмена</span>
-              </button>
-              <button
-                className="btn btn-green"
-                onClick={() => {
-                  // eslint-disable-next-line no-console
+              if (pickerMode === 'date') {
+                setPickerMode('time');
+              } else {
+                // eslint-disable-next-line no-console
+                console.log('send request', rtPicker.getDate());
+                sendBookRequest();
+                setOpenTimePicker(false);
+                setOpenOrder(false);
+              }
 
-                  const time = dayjs();
-                  const date = dayjs(rtPicker.getDate());
+              if (date.diff(time, 'm') < 0) {
+                rtPicker.setDate(time.add(1, 'h').format(DATE_FORMAT)).render();
+                setPickerMode('today');
+              }
 
-                  if (pickerMode === 'date') {
-                    setPickerMode('time');
-                  } else {
-                    // eslint-disable-next-line no-console
-                    console.log('send request', rtPicker.getDate());
-                    sendBookRequest();
-                  }
-
-                  if (date.diff(time, 'm') < 0) {
-                    rtPicker.setDate(time.add(1, 'h').format(DATE_FORMAT)).render();
-                    setPickerMode('today');
-                  }
-
-                  // eslint-disable-next-line no-console
-                  console.log(rtPicker.getDate(), date.diff(time, 'm'));
-                }}
-              >
-                <span>Готово</span>
-              </button>
-            </div>
-          </div>
+              // eslint-disable-next-line no-console
+              console.log(rtPicker.getDate(), date.diff(time, 'm'));
+            }}
+          />
         </div>
       </div>
       <div

@@ -18,16 +18,13 @@ export default webpackMerge(baseConfig, {
   // Spin up a server for quick development
   devServer: {
     open: false,
-
-    port: 8080,
-
+    port: 6006,
     static: {
       directory: paths.public,
     },
 
     // Enable gzip compression of generated files.
     compress: true,
-
     historyApiFallback: true,
   },
 

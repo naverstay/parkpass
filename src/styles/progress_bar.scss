@@ -1,0 +1,24 @@
+.progress-bar {
+  position: relative;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0731f4;
+  box-shadow: 0px -10px 10px rgba(0, 0, 0, 0.5);
+
+  &__value {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    background: #00d215;
+  }
+
+  &__label {
+    font: 700 20px/24px $SFProDisplay;
+    color: #fff;
+    position: relative;
+    z-index: 1;
+  }
+}

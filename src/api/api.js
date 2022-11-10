@@ -6,7 +6,7 @@ export const apiFetchPost = async (data, route) => {
   let response = await fetch(API_URL + route, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json;charset=utf-8',
+      //'Content-Type': 'application/json;charset=utf-8',
     },
     body: JSON.stringify(data),
   });
@@ -20,7 +20,7 @@ export const apiFetchGet = async (route) => {
 
 export const fixtures = {
   id: 147,
-  state: 4,
+  state: 3,
   client_id: null,
   parking: {
     id: 103,
