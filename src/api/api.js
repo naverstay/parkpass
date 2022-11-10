@@ -1,6 +1,6 @@
 export const DATE_FORMAT = 'YYYY-MM-DD HH:mm';
 export const API_URL = 'https://sandbox.parkpass.ru/api/v1/valet/session/';
-export const MEDIA_URL = 'https://sandbox.parkpass.ru/api/media';
+export const MEDIA_URL = 'https://sandbox.parkpass.ru';
 
 export const apiFetchPost = async (data, route) => {
   let response = await fetch(API_URL + route, {

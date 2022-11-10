@@ -48,6 +48,17 @@
     position: relative;
     padding-left: 29px;
 
+    &::before {
+      content: '';
+      position: absolute;
+      top: -4px;
+      left: 0;
+      width: 20px;
+      height: 20px;
+      background-repeat: no-repeat;
+      background-position: 50% 50%;
+    }
+
     + .order-option {
       margin-top: 16px;
     }

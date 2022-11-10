@@ -1,6 +1,7 @@
 .header {
   height: 189px;
   position: relative;
+  overflow: hidden;
 
   span {
     z-index: 1;
@@ -17,6 +18,8 @@
   }
 
   img {
-    @include img_center()
+    @include img_center();
+    max-width: 640px;
+    max-height: 300px;
   }
 }

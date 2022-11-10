@@ -2,8 +2,6 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import Rolldate from 'pickerjs';
-import City from '../images/city.png';
-import { leadZero } from '../helpers/functions';
 
 import { Order } from '../components/Order';
 import { API_URL, apiFetchGet, apiFetchPost, DATE_FORMAT, fixtures, MEDIA_URL } from '../api/api';
@@ -161,7 +159,7 @@ export const Home = () => {
     <>
       <div className="header">
         <span>PARKPASS VALET SERVICE</span>
-        <img src={City} alt="" />
+        <img src={MEDIA_URL + (parkingData?.parking?.picture || '')} alt="" />
       </div>
 
       <div className="footer">
@@ -190,7 +188,9 @@ export const Home = () => {
                 number={parkingData?.car_number || ''}
                 model={parkingData?.car_model || ''}
                 image={
-                  MEDIA_URL + (parkingData?.photos?.length ? parkingData.photos[0]?.img || '' : '')
+                  MEDIA_URL +
+                  '/api/media' +
+                  (parkingData?.photos?.length ? parkingData.photos[0]?.img || '' : '')
                 }
                 parkTime={parkDuration}
                 parkPlace={parkingData?.parking_place || ''}

@@ -21,23 +21,23 @@ export const Order = ({
       </div>
 
       <dl className="order-options">
-        <div className="order-option __time">
+        <div className="order-option icon __time">
           <dt>Время въезда:</dt>
           <dd>{startTime}</dd>
         </div>
-        <div className="order-option __card">
+        <div className="order-option icon __time">
           <dt>Время на парковке:</dt>
           <dd>{parkTime}</dd>
         </div>
-        <div className="order-option __card">
+        <div className="order-option icon __card">
           <dt>Номер Valet-карты</dt>
           <dd>{valetCard}</dd>
         </div>
-        <div className="order-option __card">
+        <div className="order-option icon __info">
           <dt>Место парковке:</dt>
           <dd>{parkPlace}</dd>
         </div>
-        <div className="order-option __card">
+        <div className="order-option icon __info">
           <dt>Стоимость:</dt>
           <dd>{price}</dd>
         </div>
