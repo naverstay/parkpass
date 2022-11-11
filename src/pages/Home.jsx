@@ -256,7 +256,7 @@ export const Home = () => {
       </div>
 
       <div
-        className={'overlay ' + (openTimePicker || openOrder || openSubmissionTime ? '__show' : '')}
+        className={'overlay ' + (openSubmissionTime || openTimePicker ? '__show' : '')}
         onClick={(e) => {
           if (e.target?.classList?.contains('__show')) {
             setOpenSubmissionTime(false);

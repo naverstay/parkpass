@@ -63,8 +63,8 @@ body {
 .overlay {
   transition: opacity .3s;
   z-index: 1;
-  //opacity: 0;
-  //pointer-events: none;
+  opacity: 0;
+  pointer-events: none;
   position: fixed;
   top: 0;
   bottom: 0;
