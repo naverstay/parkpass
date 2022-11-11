@@ -1,20 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import { dateDiff } from '../helpers/functions';
 import { ProgressBar } from './ProgressBar';
 
 let updateTimer;
+let updateDurationTimer;
 
 export const OrderInfo = ({ parkingData, setOpenTimePicker, setOpenSubmissionTime }) => {
   const STATUSES = [
-    'Статус 1',
-    'Статус 2',
-    'Статус 3',
-    'Запрос в обработке',
-    'Статус 5',
-    'Статус 6',
-    'Статус 7',
-    'Статус 8',
+    'Автомобиль принят',
+    'Парковка автомобиля',
+    'Автомобиль припаркован',
+    'В процессе подачи',
+    'В процессе подачи',
+    'В процессе подачи',
+    'Машина ожидает',
+    'Машина выдана',
+    'Машина выдана',
+    'Машина выдана',
   ];
   const submissionStatus = STATUSES[parkingData?.state || 0];
   const submissionTime = parkingData?.car_delivery_time ? dayjs(parkingData.car_delivery_time) : '';
@@ -22,21 +25,24 @@ export const OrderInfo = ({ parkingData, setOpenTimePicker, setOpenSubmissionTim
   // eslint-disable-next-line no-console
   console.log('parkingData', parkingData);
 
-  const submissionPeriod = submissionTime ? submissionTime.diff(submissionStart, 's') : '';
-  const [submissionDuration, setSubmissionDuration] = useState(0);
+  const submissionPeriod =
+    submissionTime && submissionStart ? submissionTime.diff(submissionStart, 's') : '';
+  const [submissionDuration, setSubmissionDuration] = useState(
+    submissionTime ? submissionTime.diff(dayjs(), 's') : 0,
+  );
   const [now, setNow] = useState(dayjs());
 
   useEffect(() => {
-    clearInterval(updateTimer);
+    clearInterval(updateDurationTimer);
 
     if (submissionTime) {
-      updateTimer = setInterval(() => {
+      updateDurationTimer = setInterval(() => {
         setSubmissionDuration(submissionTime.diff(dayjs(), 's'));
-      }, 30000);
+      }, 5000);
     }
 
     return () => {
-      clearInterval(updateTimer);
+      clearInterval(updateDurationTimer);
     };
   }, [submissionTime, submissionStart]);
 
@@ -45,15 +51,20 @@ export const OrderInfo = ({ parkingData, setOpenTimePicker, setOpenSubmissionTim
 
     updateTimer = setInterval(() => {
       setNow(dayjs());
-    }, 1000);
+    }, 10000);
 
     return () => {
       clearInterval(updateTimer);
     };
   }, []);
 
-  // eslint-disable-next-line no-console
-  console.log('submissionDuration', submissionDuration, submissionPeriod);
+  const timeLeft = useMemo(() => {
+    return dateDiff(now, submissionTime, true);
+  }, [now, submissionTime]);
+
+  const percentLeft = useMemo(() => {
+    return (100 * (submissionPeriod - submissionDuration)) / submissionPeriod;
+  }, [submissionDuration, submissionPeriod]);
 
   return (
     <div className="order">
@@ -98,10 +109,7 @@ export const OrderInfo = ({ parkingData, setOpenTimePicker, setOpenSubmissionTim
 
       <div className="order-footer">
         {submissionTime ? (
-          <ProgressBar
-            text={'Осталось: ' + dateDiff(now, submissionTime, true)}
-            percent={100 - (submissionPeriod - submissionDuration) / submissionPeriod}
-          />
+          <ProgressBar text={'Осталось: ' + timeLeft} percent={100 - percentLeft} />
         ) : (
           <button
             className="btn btn-green"

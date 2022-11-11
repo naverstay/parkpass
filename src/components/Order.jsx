@@ -67,6 +67,12 @@ export const Order = ({ parkingData, setOpenSubmissionTime }) => {
             <dd>{price}</dd>
           </div>
         </dl>
+
+        <div className="order-info__help">
+          <div className="btn btn-blue">
+            <span>Мне нужна помощь</span>
+          </div>
+        </div>
       </div>
 
       <div className="order-footer">

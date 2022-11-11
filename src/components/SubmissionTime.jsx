@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const SumbissionTime = ({
+export const SubmissionTime = ({
   setOpenSubmissionTime,
   setOpenTimePicker,
   rtPicker,

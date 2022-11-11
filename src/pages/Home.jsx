@@ -5,8 +5,8 @@ import Rolldate from 'pickerjs';
 
 import { Order } from '../components/Order';
 import { API_URL, apiFetchGet, apiFetchPost, DATE_FORMAT, fixtures, MEDIA_URL } from '../api/api';
-import { Sumbission } from '../components/Submission';
-import { SumbissionTime } from '../components/SubmissionTime';
+import { Submission } from '../components/Submission';
+import { SubmissionTime } from '../components/SubmissionTime';
 import { OrderInfo } from '../components/OrderInfo';
 import { NoData } from '../components/NoData';
 
@@ -76,7 +76,15 @@ export const Home = () => {
       submissionDate,
       submissionDate && submissionDate.format(DATE_FORMAT),
     );
-    rtPicker?.setDate((submissionDate || dayjs()).format(DATE_FORMAT)).render();
+
+    const time = dayjs();
+    let date = submissionDate || dayjs();
+
+    if (date.diff(time, 'm') < 10) {
+      date = time.add(11, 'm');
+    }
+
+    rtPicker?.setDate(date.format(DATE_FORMAT)).render();
   }, [submissionDate]);
 
   useEffect(() => {
@@ -197,7 +205,7 @@ export const Home = () => {
         </div>
 
         <div className={'footer-container' + (openSubmissionTime ? ' __open' : '')}>
-          <SumbissionTime
+          <SubmissionTime
             setOpenSubmissionTime={setOpenSubmissionTime}
             setOpenTimePicker={setOpenTimePicker}
             rtPicker={rtPicker}
@@ -210,7 +218,7 @@ export const Home = () => {
         </div>
 
         <div className={'footer-container' + (openTimePicker ? ' __open' : '')}>
-          <Sumbission
+          <Submission
             pickerMode={pickerMode}
             setPickerMode={setPickerMode}
             setSubmissionDate={setSubmissionDate}
@@ -224,6 +232,12 @@ export const Home = () => {
               const time = dayjs();
               const date = dayjs(rtPicker.getDate());
 
+              if (date.diff(time, 'm') < 10) {
+                rtPicker.setDate(time.add(11, 'm').format(DATE_FORMAT)).render();
+                setPickerMode('today');
+                return false;
+              }
+
               if (pickerMode === 'date') {
                 setPickerMode('time');
               } else {
@@ -232,11 +246,6 @@ export const Home = () => {
                 sendBookRequest();
                 setOpenTimePicker(false);
                 setOpenOrder(false);
-              }
-
-              if (date.diff(time, 'm') < 0) {
-                rtPicker.setDate(time.add(1, 'h').format(DATE_FORMAT)).render();
-                setPickerMode('today');
               }
 
               // eslint-disable-next-line no-console

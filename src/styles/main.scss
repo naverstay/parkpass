@@ -12,8 +12,7 @@
 @import "footer";
 
 :root {
-  --app-text-color: #444;
-  --app-background-color: #fff;
+  --app-text-color: #fff;
   --app-height: 100vh;
   --app-width: 414px;
   --app-scroll-size: 4px;
@@ -48,8 +47,8 @@ body {
   overflow-x: clip;
   position: relative;
   color: var(--app-text-color);
-  background-color: var(--app-background-color);
   font-family: $Roboto;
+  background: linear-gradient(180.05deg,#081a90 -4.3%,#000a4e 99.96%);
 }
 
 .page {

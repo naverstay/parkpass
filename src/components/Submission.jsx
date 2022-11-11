@@ -2,7 +2,7 @@ import React from 'react';
 import dayjs from 'dayjs';
 import { DATE_FORMAT } from '../api/api';
 
-export const Sumbission = ({
+export const Submission = ({
   pickerMode,
   setPickerMode,
   setSubmissionDate,
@@ -25,7 +25,6 @@ export const Sumbission = ({
           className={'btn btn-transp ' + (pickerMode === 'today' ? '__active' : '')}
           onClick={() => {
             setPickerMode('today');
-            setSubmissionDate(dayjs());
           }}
         >
           Сегодня
@@ -34,22 +33,21 @@ export const Sumbission = ({
           className={'btn btn-transp ' + (pickerMode === 'tomorrow' ? '__active' : '')}
           onClick={() => {
             setPickerMode('tomorrow');
-            setSubmissionDate(dayjs().add(1, 'd'));
           }}
         >
           Завтра
         </div>
-        <div
-          className={
-            'btn btn-transp ' + (pickerMode === 'date' || pickerMode === 'time' ? '__active' : '')
-          }
-          onClick={() => {
-            setSubmissionDate('');
-            setPickerMode('date');
-          }}
-        >
-          Выбрать дату
-        </div>
+        {/*<div*/}
+        {/*  className={*/}
+        {/*    'btn btn-transp ' + (pickerMode === 'date' || pickerMode === 'time' ? '__active' : '')*/}
+        {/*  }*/}
+        {/*  onClick={() => {*/}
+        {/*    setSubmissionDate('');*/}
+        {/*    setPickerMode('date');*/}
+        {/*  }}*/}
+        {/*>*/}
+        {/*  Выбрать дату*/}
+        {/*</div>*/}
       </div>
       <div className={'submission-time'}>
         <input
