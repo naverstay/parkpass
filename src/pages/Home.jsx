@@ -188,7 +188,11 @@ export const Home = () => {
 
         <div className={'footer-container' + (showOrderInfo ? ' __open' : '')}>
           {parkingData ? (
-            <OrderInfo setOpenTimePicker={setOpenTimePicker} parkingData={parkingData} />
+            <OrderInfo
+              setOpenTimePicker={setOpenTimePicker}
+              setOpenSubmissionTime={setOpenSubmissionTime}
+              parkingData={parkingData}
+            />
           ) : null}
         </div>
 

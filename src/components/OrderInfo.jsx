@@ -5,7 +5,7 @@ import { ProgressBar } from './ProgressBar';
 
 let updateTimer;
 
-export const OrderInfo = ({ parkingData }) => {
+export const OrderInfo = ({ parkingData, setOpenTimePicker, setOpenSubmissionTime }) => {
   const STATUSES = [
     'Статус 1',
     'Статус 2',
@@ -22,16 +22,18 @@ export const OrderInfo = ({ parkingData }) => {
   // eslint-disable-next-line no-console
   console.log('parkingData', parkingData);
 
-  const submissionPeriod = submissionTime.diff(submissionStart, 's');
+  const submissionPeriod = submissionTime ? submissionTime.diff(submissionStart, 's') : '';
   const [submissionDuration, setSubmissionDuration] = useState(0);
   const [now, setNow] = useState(dayjs());
 
   useEffect(() => {
     clearInterval(updateTimer);
 
-    updateTimer = setInterval(() => {
-      setSubmissionDuration(submissionTime.diff(dayjs(), 's'));
-    }, 30000);
+    if (submissionTime) {
+      updateTimer = setInterval(() => {
+        setSubmissionDuration(submissionTime.diff(dayjs(), 's'));
+      }, 30000);
+    }
 
     return () => {
       clearInterval(updateTimer);
@@ -61,16 +63,18 @@ export const OrderInfo = ({ parkingData }) => {
       </div>
 
       <div className="order-container">
-        <div className="order-info">
-          <div className="order-info__item">
-            <p>Время подачи Авто:</p>
-            <div className="order-info__time">{submissionTime.format('HH:mm')}</div>
+        {submissionTime ? (
+          <div className="order-info">
+            <div className="order-info__item">
+              <p>Время подачи Авто:</p>
+              <div className="order-info__time">{submissionTime.format('HH:mm')}</div>
+            </div>
+            <div className="order-info__item">
+              <p>Статус подачи</p>
+              <div className="order-info__status">{submissionStatus}</div>
+            </div>
           </div>
-          <div className="order-info__item">
-            <p>Статус подачи</p>
-            <div className="order-info__status">{submissionStatus}</div>
-          </div>
-        </div>
+        ) : null}
 
         <div className="order-info__item">
           <p>Информация о валет сервисе</p>
@@ -82,13 +86,32 @@ export const OrderInfo = ({ parkingData }) => {
             <a href="https://t.me/valetprime">https://t.me/valetprime</a>
           </div>
         </div>
+
+        {submissionTime ? null : (
+          <div className="order-info__help">
+            <div className="btn btn-blue">
+              <span>Мне нужна помощь</span>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="order-footer">
-        <ProgressBar
-          text={'Осталось: ' + dateDiff(now, submissionTime, true)}
-          percent={100 - (submissionPeriod - submissionDuration) / submissionPeriod}
-        />
+        {submissionTime ? (
+          <ProgressBar
+            text={'Осталось: ' + dateDiff(now, submissionTime, true)}
+            percent={100 - (submissionPeriod - submissionDuration) / submissionPeriod}
+          />
+        ) : (
+          <button
+            className="btn btn-green"
+            onClick={() => {
+              setOpenSubmissionTime(true);
+            }}
+          >
+            <span>Подать автомобиль</span>
+          </button>
+        )}
       </div>
     </div>
   );
