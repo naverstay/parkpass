@@ -1,10 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import dayjs from 'dayjs';
-import { dateDiff } from '../helpers/functions';
-import { ProgressBar } from './ProgressBar';
+import React from 'react';
 
-let updateTimer;
-let updateDurationTimer;
+import { Progress } from './Progress';
+import dayjs from 'dayjs';
 
 export const OrderInfo = ({ parkingData, setOpenTimePicker, setOpenSubmissionTime }) => {
   const STATUSES = [
@@ -21,50 +18,8 @@ export const OrderInfo = ({ parkingData, setOpenTimePicker, setOpenSubmissionTim
   ];
   const submissionStatus = STATUSES[parkingData?.state || 0];
   const submissionTime = parkingData?.car_delivery_time ? dayjs(parkingData.car_delivery_time) : '';
-  const submissionStart = parkingData?.started_at ? dayjs(parkingData.started_at) : '';
   // eslint-disable-next-line no-console
   console.log('parkingData', parkingData);
-
-  const submissionPeriod =
-    submissionTime && submissionStart ? submissionTime.diff(submissionStart, 's') : '';
-  const [submissionDuration, setSubmissionDuration] = useState(
-    submissionTime ? submissionTime.diff(dayjs(), 's') : 0,
-  );
-  const [now, setNow] = useState(dayjs());
-
-  useEffect(() => {
-    clearInterval(updateDurationTimer);
-
-    if (submissionTime) {
-      updateDurationTimer = setInterval(() => {
-        setSubmissionDuration(submissionTime.diff(dayjs(), 's'));
-      }, 5000);
-    }
-
-    return () => {
-      clearInterval(updateDurationTimer);
-    };
-  }, [submissionTime, submissionStart]);
-
-  useEffect(() => {
-    clearInterval(updateTimer);
-
-    updateTimer = setInterval(() => {
-      setNow(dayjs());
-    }, 10000);
-
-    return () => {
-      clearInterval(updateTimer);
-    };
-  }, []);
-
-  const timeLeft = useMemo(() => {
-    return dateDiff(now, submissionTime, true);
-  }, [now, submissionTime]);
-
-  const percentLeft = useMemo(() => {
-    return (100 * (submissionPeriod - submissionDuration)) / submissionPeriod;
-  }, [submissionDuration, submissionPeriod]);
 
   return (
     <div className="order">
@@ -107,10 +62,10 @@ export const OrderInfo = ({ parkingData, setOpenTimePicker, setOpenSubmissionTim
         )}
       </div>
 
-      <div className="order-footer">
-        {submissionTime ? (
-          <ProgressBar text={'Осталось: ' + timeLeft} percent={100 - percentLeft} />
-        ) : (
+      {submissionTime ? (
+        <Progress parkingData={parkingData} />
+      ) : (
+        <div className="order-footer">
           <button
             className="btn btn-green"
             onClick={() => {
@@ -119,8 +74,8 @@ export const OrderInfo = ({ parkingData, setOpenTimePicker, setOpenSubmissionTim
           >
             <span>Подать автомобиль</span>
           </button>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

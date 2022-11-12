@@ -53,7 +53,7 @@ export const fixtures = {
   },
   responsible_for_delivery: null,
   parking_card_get_at: null,
-  car_delivery_time: '2022-11-10T19:26:00Z',
+  car_delivery_time: '2022-11-16T19:26:00Z',
   car_delivered_at: null,
   car_delivered_by: null,
   paid_at: null,
@@ -64,7 +64,7 @@ export const fixtures = {
   request: {
     id: 203,
     status: 1,
-    car_delivery_time: '2022-11-10T19:26:00Z',
+    car_delivery_time: '2022-11-16T19:26:00Z',
     accepted_by: null,
     accepted_at: null,
     created_at: '2022-11-09T21:34:37.655800Z',

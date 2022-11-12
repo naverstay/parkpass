@@ -1,46 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { MEDIA_URL } from '../api/api';
-import { ProgressBar } from './ProgressBar';
-import { dateDiff } from '../helpers/functions';
-import dayjs from 'dayjs';
+import React from 'react';
 import { Link } from 'react-router-dom';
-
-let updateTimer;
+import { Progress } from './Progress';
 
 export const Survey = ({ parkingData }) => {
-  const submissionTime = parkingData?.car_delivery_time ? dayjs(parkingData.car_delivery_time) : '';
-  const submissionStart = parkingData?.started_at ? dayjs(parkingData.started_at) : '';
-  // eslint-disable-next-line no-console
-  console.log('parkingData', parkingData);
-
-  const submissionPeriod = submissionTime.diff(submissionStart, 's');
-  const [submissionDuration, setSubmissionDuration] = useState(submissionTime.diff(dayjs(), 's'));
-  const [now, setNow] = useState(dayjs());
-
-  useEffect(() => {
-    clearInterval(updateTimer);
-
-    updateTimer = setInterval(() => {
-      setSubmissionDuration(submissionTime.diff(dayjs(), 's'));
-    }, 30000);
-
-    return () => {
-      clearInterval(updateTimer);
-    };
-  }, [submissionTime, submissionStart]);
-
-  useEffect(() => {
-    clearInterval(updateTimer);
-
-    updateTimer = setInterval(() => {
-      setNow(dayjs());
-    }, 1000);
-
-    return () => {
-      clearInterval(updateTimer);
-    };
-  }, []);
-
   return (
     <div className="order">
       <div className="order-top">
@@ -76,12 +38,7 @@ export const Survey = ({ parkingData }) => {
         </div>
       </div>
 
-      <div className="order-footer">
-        <ProgressBar
-          text={'Осталось: ' + dateDiff(now, submissionTime, true)}
-          percent={100 - (submissionPeriod - submissionDuration) / submissionPeriod}
-        />
-      </div>
+      <Progress parkingData={parkingData} />
     </div>
   );
 };
