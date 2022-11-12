@@ -1,0 +1,17 @@
+.dev-block {
+  z-index: 2;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 200px;
+  padding: 10px;
+  background: red;
+  display: flex;
+  flex-flow: column;
+  gap: 8px;
+
+  a {
+    color: #fff;
+  }
+
+}

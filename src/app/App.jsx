@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { Home } from '../pages/Home';
 import { useWindowDimension } from '../hooks/useWindowDimension';
 import '../styles/main.scss';

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import Rolldate from 'pickerjs';
 
@@ -9,6 +9,8 @@ import { Submission } from '../components/Submission';
 import { SubmissionTime } from '../components/SubmissionTime';
 import { OrderInfo } from '../components/OrderInfo';
 import { NoData } from '../components/NoData';
+import { DevBlock } from '../components/DevBlock';
+import { PageOverlay } from '../components/PageOverlay';
 
 let rtPicker = null;
 
@@ -168,6 +170,8 @@ export const Home = () => {
 
   return (
     <>
+      <DevBlock />
+      {/* todo remove DevBlock */}
       <div className="header">
         <span>PARKPASS VALET SERVICE</span>
         {parkingData?.parking?.picture ? (
@@ -255,13 +259,11 @@ export const Home = () => {
         </div>
       </div>
 
-      <div
-        className={'overlay ' + (openSubmissionTime || openTimePicker ? '__show' : '')}
-        onClick={(e) => {
-          if (e.target?.classList?.contains('__show')) {
-            setOpenSubmissionTime(false);
-            setOpenTimePicker(false);
-          }
+      <PageOverlay
+        show={openSubmissionTime || openTimePicker}
+        clickCallback={() => {
+          setOpenSubmissionTime(false);
+          setOpenTimePicker(false);
         }}
       />
     </>

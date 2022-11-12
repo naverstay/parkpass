@@ -5,9 +5,10 @@ import { API_URL, apiFetchGet, apiFetchPost, DATE_FORMAT, fixtures, MEDIA_URL } 
 
 import { Rating } from '../components/Rating';
 import { NoData } from '../components/NoData';
+import { PageOverlay } from '../components/PageOverlay';
 
 export const RatingPage = () => {
-  const [openSurvey, setOpenSurvey] = useState(false);
+  const [openRating, setOpenRating] = useState(false);
   const [openNoData, setOpenNoData] = useState(false);
 
   const [parkingData, setParkingData] = useState(fixtures); // fixtures
@@ -34,7 +35,7 @@ export const RatingPage = () => {
 
   useEffect(() => {
     if (parkingData) {
-      setOpenSurvey(true);
+      setOpenRating(true);
     }
   }, [parkingData]);
 
@@ -51,23 +52,23 @@ export const RatingPage = () => {
         <div className={'footer-container' + (openNoData ? ' __open' : '')}>
           <NoData />
         </div>
+
         <div
-          className={'footer-container' + (openSurvey ? ' __open' : '')}
+          className={'footer-container' + (openRating ? ' __open' : '')}
           onClick={(e) => {
             if (e.target?.classList?.contains('__overlay')) {
-              //setOpenSurvey(false);
+              //setOpenRating(false);
             }
           }}
         >
           {parkingData ? <Rating parkingData={parkingData} /> : null}
         </div>
       </div>
-      <div
-        className={'overlay ' + (openSurvey ? '__show' : '')}
-        onClick={(e) => {
-          if (e.target?.classList?.contains('__show')) {
-            //setOpenSurvey(false);
-          }
+
+      <PageOverlay
+        show={openRating}
+        clickCallback={() => {
+          //setOpenRating(false);
         }}
       />
     </>

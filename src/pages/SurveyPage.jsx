@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { API_URL, apiFetchGet, fixtures, MEDIA_URL } from '../api/api';
 import { Survey } from '../components/Survey';
 import { NoData } from '../components/NoData';
+import { PageOverlay } from '../components/PageOverlay';
 
 export const SurveyPage = () => {
   const [openSurvey, setOpenSurvey] = useState(false);
@@ -64,12 +65,11 @@ export const SurveyPage = () => {
           ) : null}
         </div>
       </div>
-      <div
-        className={'overlay ' + (openSurvey ? '__show' : '')}
-        onClick={(e) => {
-          if (e.target?.classList?.contains('__show')) {
-            //setOpenSurvey(false);
-          }
+
+      <PageOverlay
+        show={openSurvey}
+        clickCallback={() => {
+          //setOpenSurvey(false);
         }}
       />
     </>
