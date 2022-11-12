@@ -9,7 +9,7 @@ export const SurveyPage = () => {
   const [openRatings, setOpenRatings] = useState(false);
   const [openNoData, setOpenNoData] = useState(false);
 
-  const [parkingData, setParkingData] = useState(null); // fixtures
+  const [parkingData, setParkingData] = useState(fixtures); // fixtures
   let [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
