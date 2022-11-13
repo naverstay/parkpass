@@ -27,7 +27,7 @@ export const Order = ({ parkingData, setOpenSubmissionTime }) => {
     ? dayjs(parkingData.started_at).format('DD.MM.YYYY в HH:mm')
     : '';
 
-  const valetCard = parkingData?.parking_card || '';
+  const valetCard = parkingData?.valet_card_id || '';
 
   return (
     <div className="order">
