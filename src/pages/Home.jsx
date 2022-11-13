@@ -10,6 +10,10 @@ import { SubmissionTime } from '../components/SubmissionTime';
 import { NoData } from '../components/NoData';
 import { DevBlock } from '../components/DevBlock';
 import { PageOverlay } from '../components/PageOverlay';
+import dayjsPluginUTC from 'dayjs-plugin-utc';
+import { CHECK_STATUS_TIMER } from '../helpers/functions';
+
+dayjs.extend(dayjsPluginUTC);
 
 let rtPicker = null;
 let statusWatchInterval = 0;
@@ -93,7 +97,7 @@ export const Home = () => {
     if (startStatusWatching) {
       statusWatchInterval = setInterval(() => {
         checkBookStatus();
-      }, 1000);
+      }, CHECK_STATUS_TIMER);
     }
 
     return () => {

@@ -1,7 +1,10 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { ProgressBar } from './ProgressBar';
-import { dateDiff } from '../helpers/functions';
+import { CHECK_STATUS_TIMER, dateDiff } from '../helpers/functions';
 import dayjs from 'dayjs';
+import dayjsPluginUTC from 'dayjs-plugin-utc';
+
+dayjs.extend(dayjsPluginUTC);
 
 let updateTimer;
 let updateDurationTimer;
@@ -34,7 +37,7 @@ export const Progress = ({ parkingData }) => {
     if (submissionTime) {
       updateDurationTimer = setInterval(() => {
         setSubmissionDuration(submissionTime.diff(dayjs(), 's'));
-      }, 5000);
+      }, CHECK_STATUS_TIMER);
     }
 
     return () => {
@@ -47,7 +50,7 @@ export const Progress = ({ parkingData }) => {
 
     updateTimer = setInterval(() => {
       setNow(dayjs());
-    }, 10000);
+    }, CHECK_STATUS_TIMER);
 
     return () => {
       clearInterval(updateTimer);

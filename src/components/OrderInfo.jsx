@@ -2,6 +2,9 @@ import React, { useMemo } from 'react';
 import dayjs from 'dayjs';
 import { Progress } from './Progress';
 import { OrderData } from './OrderData';
+import dayjsPluginUTC from 'dayjs-plugin-utc';
+
+dayjs.extend(dayjsPluginUTC);
 
 export const OrderInfo = ({ parkingData, setOpenTimePicker, setOpenSubmissionTime }) => {
   const submissionStatus = useMemo(() => {

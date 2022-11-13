@@ -43,3 +43,5 @@ export const dateDiff = (d1, d2, p) => {
     return ret;
   }
 };
+
+export const CHECK_STATUS_TIMER = 5000;

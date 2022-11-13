@@ -3,6 +3,9 @@ import dayjs from 'dayjs';
 import { OrderData } from './OrderData';
 import { Progress } from './Progress';
 import { ProgressBar } from './ProgressBar';
+import dayjsPluginUTC from 'dayjs-plugin-utc';
+
+dayjs.extend(dayjsPluginUTC);
 
 export const Order = ({ parkingData, setOpenSubmissionTime, setOpenTimePicker }) => {
   const { state } = parkingData;
@@ -27,8 +30,6 @@ export const Order = ({ parkingData, setOpenSubmissionTime, setOpenTimePicker })
   const submissionTime = useMemo(() => {
     return parkingData?.car_delivery_time ? dayjs(parkingData.car_delivery_time) : '';
   }, [parkingData]);
-  // eslint-disable-next-line no-console
-  console.log('submissionStatus', submissionStatus, parkingData);
 
   return (
     <div className="order">
