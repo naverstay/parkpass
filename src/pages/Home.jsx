@@ -37,6 +37,8 @@ export const Home = () => {
   const sendBookRequest = useCallback(() => {
     apiFetchPost({ date: dayjs(rtPicker.getDate()).format(DATE_FORMAT), id: VCID }, 'book/').then(
       (r) => {
+        // eslint-disable-next-line no-console
+        console.log('sendBookRequest', r);
         setParkingData(r);
       },
     );
@@ -46,6 +48,9 @@ export const Home = () => {
     if (P && VCID) {
       // todo
       apiFetchGet('get/?id=' + VCID + '&P=' + P).then((d) => {
+        // eslint-disable-next-line no-console
+        console.log('fetch get', d);
+
         setParkingData(d);
       });
     } else {
@@ -54,6 +59,13 @@ export const Home = () => {
   }, [VCID, P]);
 
   useEffect(() => {
+    // eslint-disable-next-line no-console
+    console.log(
+      'submissionDate',
+      submissionDate,
+      submissionDate && submissionDate.format(DATE_FORMAT),
+    );
+
     const time = dayjs();
     let date = submissionDate || dayjs();
 
@@ -71,6 +83,7 @@ export const Home = () => {
           setParkingData((p) => ({ ...p, state: d.session_status }));
 
           if (d.session_status === 10) {
+            setStartStatusWatching(false);
             clearInterval(statusWatchInterval);
           }
         }
@@ -92,7 +105,7 @@ export const Home = () => {
     if (parkingData?.state) {
       setOpenNoData(false);
 
-      if (!startStatusWatching && parkingData.state > 3) {
+      if (!startStatusWatching && [4, 5, 6, 7].indexOf(parkingData.state) > -1) {
         setStartStatusWatching(true);
       }
     }

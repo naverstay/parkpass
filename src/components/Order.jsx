@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import dayjs from 'dayjs';
 import { OrderData } from './OrderData';
 import { Progress } from './Progress';
+import { ProgressBar } from './ProgressBar';
 
 export const Order = ({ parkingData, setOpenSubmissionTime, setOpenTimePicker }) => {
   const { state } = parkingData;
@@ -26,6 +27,8 @@ export const Order = ({ parkingData, setOpenSubmissionTime, setOpenTimePicker })
   const submissionTime = useMemo(() => {
     return parkingData?.car_delivery_time ? dayjs(parkingData.car_delivery_time) : '';
   }, [parkingData]);
+  // eslint-disable-next-line no-console
+  console.log('submissionStatus', submissionStatus, parkingData);
 
   return (
     <div className="order">
@@ -77,9 +80,11 @@ export const Order = ({ parkingData, setOpenSubmissionTime, setOpenTimePicker })
       </div>
 
       <div className="order-footer">
-        {state > 3 ? (
+        {[4, 5, 6].indexOf(state) > -1 ? (
           <Progress parkingData={parkingData} />
-        ) : (
+        ) : state === 7 ? (
+          <ProgressBar percent={100} text={submissionStatus} />
+        ) : state > 7 ? null : (
           <button
             className="btn btn-green"
             onClick={() => {
