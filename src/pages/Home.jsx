@@ -36,9 +36,11 @@ export const Home = () => {
 
     apiFetchGet('status/?id=' + VCID).then((d) => {
       // eslint-disable-next-line no-console
-      console.log('fetch status', d);
+      console.log('checkBookStatus', d);
 
-      setParkingData({ ...parkingData, status: d });
+      if (d?.session_status) {
+        setParkingData({ ...parkingData, status: d.session_status });
+      }
     });
   }, [parkingData, searchParams]);
 
