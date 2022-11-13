@@ -1,7 +1,7 @@
 import React from 'react';
-
-import { Progress } from './Progress';
 import dayjs from 'dayjs';
+import { Progress } from './Progress';
+import { OrderData } from './OrderData';
 
 export const OrderInfo = ({ parkingData, setOpenTimePicker, setOpenSubmissionTime }) => {
   const STATUSES = [
@@ -52,6 +52,8 @@ export const OrderInfo = ({ parkingData, setOpenTimePicker, setOpenSubmissionTim
             <a href="https://t.me/valetprime">https://t.me/valetprime</a>
           </div>
         </div>
+
+        <OrderData parkingData={parkingData} />
 
         {submissionTime ? null : (
           <div className="order-info__help">
