@@ -86,7 +86,7 @@ export const Home = () => {
         if (d?.session_status) {
           setParkingData((p) => ({ ...p, state: d.session_status }));
 
-          if (d.session_status === 10) {
+          if (d.session_status > 7) {
             setStartStatusWatching(false);
             clearInterval(statusWatchInterval);
           }
