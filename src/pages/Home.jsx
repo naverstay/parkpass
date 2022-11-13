@@ -133,7 +133,7 @@ export const Home = () => {
           month: 1,
           day: 1,
           hour: 1,
-          minute: 1,
+          minute: 5,
           second: 10,
           millisecond: 100,
         },
