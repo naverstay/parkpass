@@ -1,25 +1,31 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import dayjs from 'dayjs';
 import { Progress } from './Progress';
 import { OrderData } from './OrderData';
 
 export const OrderInfo = ({ parkingData, setOpenTimePicker, setOpenSubmissionTime }) => {
-  const STATUSES = [
-    'Автомобиль принят',
-    'Парковка автомобиля',
-    'Автомобиль припаркован',
-    'В процессе подачи',
-    'В процессе подачи',
-    'В процессе подачи',
-    'Машина ожидает',
-    'Машина выдана',
-    'Машина выдана',
-    'Машина выдана',
-  ];
-  const submissionStatus = STATUSES[parkingData?.state || 0];
-  const submissionTime = parkingData?.car_delivery_time ? dayjs(parkingData.car_delivery_time) : '';
+  const submissionStatus = useMemo(() => {
+    const STATUSES = [
+      'Автомобиль принят',
+      'Парковка автомобиля',
+      'Автомобиль припаркован',
+      'В процессе подачи',
+      'В процессе подачи',
+      'В процессе подачи',
+      'Машина ожидает',
+      'Машина выдана',
+      'Машина выдана',
+      'Машина выдана',
+    ];
+
+    return STATUSES[(parkingData?.state || 1) - 1];
+  }, [parkingData?.state]);
+
+  const submissionTime = useMemo(() => {
+    return parkingData?.car_delivery_time ? dayjs(parkingData.car_delivery_time) : '';
+  }, [parkingData]);
   // eslint-disable-next-line no-console
-  console.log('parkingData', parkingData);
+  console.log('submissionStatus', submissionStatus, parkingData);
 
   return (
     <div className="order">

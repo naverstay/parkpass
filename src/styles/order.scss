@@ -1,7 +1,6 @@
 .order {
   background: linear-gradient(180.05deg, #081a90 -4.3%, #000a4e 99.96%);
-  box-shadow: 0px -5px 50px rgba(0, 0, 0, 0.75);
-
+  box-shadow: 0 -5px 50px rgba(0, 0, 0, 0.75);
 
   .title {
     color: #fff;
@@ -20,7 +19,6 @@
   }
 
   &-info {
-    margin-bottom: 16px;
     display: grid;
     gap: 18px;
     grid-template-columns: 1fr 1fr;
@@ -57,7 +55,6 @@
     }
 
     &__help {
-      padding-top: 16px;
 
       .btn {
         text-decoration: none;
@@ -189,9 +186,12 @@
 
   &-container {
     padding: 16px;
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 16px;
     max-height: calc(var(--app-height) - 200px);
     overflow-y: auto;
-    box-shadow: 0px -5px 50px rgba(0, 0, 0, 0.75);
+    box-shadow: 0 -5px 50px rgba(0, 0, 0, 0.75);
 
     > .order-info__item + .order-info__item {
       margin-top: 16px;
@@ -199,7 +199,7 @@
   }
 
   &-footer {
-    box-shadow: 0px -5px 50px rgba(0, 0, 0, 0.75);
+    box-shadow: 0 -5px 50px rgba(0, 0, 0, 0.75);
 
     .btn {
       padding: 20px;
@@ -265,10 +265,6 @@
     grid-template-areas: "image model" "image number";
     column-gap: 21px;
     row-gap: 6px;
-
-    + .order-options {
-      margin-top: 16px;
-    }
 
     &__car {
       grid-area: image;

@@ -35,7 +35,10 @@ export const dateDiff = (d1, d2, p) => {
   const ret = [years, months, days, hours, minutes];
 
   if (p) {
-    return ret.map((d, di) => addVal(d, periods[di])).join(' ');
+    return ret
+      .map((d, di) => addVal(d, periods[di]))
+      .join(' ')
+      .trim();
   } else {
     return ret;
   }

@@ -7,16 +7,25 @@ let updateTimer;
 let updateDurationTimer;
 
 export const Progress = ({ parkingData }) => {
-  const submissionTime = parkingData?.car_delivery_time ? dayjs(parkingData.car_delivery_time) : '';
-  const submissionStart = parkingData?.started_at ? dayjs(parkingData.started_at) : '';
-  // eslint-disable-next-line no-console
-  console.log('parkingData', parkingData);
+  const submissionTime = useMemo(
+    () => (parkingData?.car_delivery_time ? dayjs(parkingData.car_delivery_time) : ''),
+    [parkingData?.car_delivery_time],
+  );
 
-  const submissionPeriod =
-    submissionTime && submissionStart ? submissionTime.diff(submissionStart, 's') : '';
+  const submissionStart = useMemo(
+    () => (parkingData?.started_at ? dayjs(parkingData.started_at) : ''),
+    [parkingData?.started_at],
+  );
+
+  const submissionPeriod = useMemo(
+    () => (submissionTime && submissionStart ? submissionTime.diff(submissionStart, 's') : ''),
+    [submissionTime, submissionStart],
+  );
+
   const [submissionDuration, setSubmissionDuration] = useState(
     submissionTime ? submissionTime.diff(dayjs(), 's') : 0,
   );
+
   const [now, setNow] = useState(dayjs());
 
   useEffect(() => {

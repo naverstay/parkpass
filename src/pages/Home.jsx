@@ -7,7 +7,6 @@ import { Order } from '../components/Order';
 import { API_URL, apiFetchGet, apiFetchPost, DATE_FORMAT, fixtures, MEDIA_URL } from '../api/api';
 import { Submission } from '../components/Submission';
 import { SubmissionTime } from '../components/SubmissionTime';
-import { OrderInfo } from '../components/OrderInfo';
 import { NoData } from '../components/NoData';
 import { DevBlock } from '../components/DevBlock';
 import { PageOverlay } from '../components/PageOverlay';
@@ -19,71 +18,42 @@ export const Home = () => {
   const now = dayjs();
   const pickerInputRef = useRef(null);
   const rollDateRef = useRef(null);
-  const [orderState, setOrderState] = useState(0);
   const [pickerMode, setPickerMode] = useState('today');
-  const [openTimePicker, setOpenTimePicker] = useState(false);
-  const [openOrder, setOpenOrder] = useState(false);
   const [openNoData, setOpenNoData] = useState(false);
-  const [showOrderInfo, setShowOrderInfo] = useState(false);
+  const [openTimePicker, setOpenTimePicker] = useState(false);
   const [openSubmissionTime, setOpenSubmissionTime] = useState(false);
   const [startStatusWatching, setStartStatusWatching] = useState(false);
   const [submissionDate, setSubmissionDate] = useState(now);
   const [parkingData, setParkingData] = useState(null); // fixtures
   let [searchParams, setSearchParams] = useSearchParams();
 
-  const checkBookStatus = useCallback(() => {
-    const VCID = searchParams.get('VCID');
-
-    apiFetchGet('status/?id=' + VCID).then((d) => {
-      // eslint-disable-next-line no-console
-      console.log('checkBookStatus', d);
-
-      if (d?.session_status) {
-        setParkingData({ ...parkingData, status: d.session_status });
-      }
-    });
-  }, [parkingData, searchParams]);
+  const { P, VCID } = useMemo(() => {
+    return {
+      P: searchParams.get('P'),
+      VCID: searchParams.get('VCID'),
+    };
+  }, [searchParams]);
 
   const sendBookRequest = useCallback(() => {
-    const VCID = searchParams.get('VCID');
     apiFetchPost({ date: dayjs(rtPicker.getDate()).format(DATE_FORMAT), id: VCID }, 'book/').then(
       (r) => {
-        // eslint-disable-next-line no-console
-        console.log('sendBookRequest', r);
         setParkingData(r);
       },
     );
-  }, [searchParams]);
+  }, [VCID]);
 
   useEffect(() => {
-    // eslint-disable-next-line no-console
-    console.log('searchParams', Object.fromEntries(searchParams));
-
-    const P = searchParams.get('P');
-    const VCID = searchParams.get('VCID');
-    const PCID = searchParams.get('PCID');
-
     if (P && VCID) {
       // todo
       apiFetchGet('get/?id=' + VCID + '&P=' + P).then((d) => {
-        // eslint-disable-next-line no-console
-        console.log('fetch get', d);
-
         setParkingData(d);
       });
     } else {
       setOpenNoData(true);
     }
-  }, [searchParams]);
+  }, [VCID, P]);
 
   useEffect(() => {
-    // eslint-disable-next-line no-console
-    console.log(
-      'submissionDate',
-      submissionDate,
-      submissionDate && submissionDate.format(DATE_FORMAT),
-    );
-
     const time = dayjs();
     let date = submissionDate || dayjs();
 
@@ -95,29 +65,38 @@ export const Home = () => {
   }, [submissionDate]);
 
   useEffect(() => {
-    if (parkingData) {
-      setOpenNoData(false);
+    const checkBookStatus = () => {
+      apiFetchGet('status/?id=' + VCID).then((d) => {
+        if (d?.session_status) {
+          setParkingData((p) => ({ ...p, state: d.session_status }));
 
-      if (!startStatusWatching && [4, 5, 6, 7].indexOf(parkingData.state) > -1) {
-        setShowOrderInfo(true);
-        setStartStatusWatching(true);
-      } else {
-        setOpenOrder(true);
-      }
-    }
-  }, [parkingData, startStatusWatching]);
+          if (d.session_status === 10) {
+            clearInterval(statusWatchInterval);
+          }
+        }
+      });
+    };
 
-  useEffect(() => {
     if (startStatusWatching) {
       statusWatchInterval = setInterval(() => {
         checkBookStatus();
-      }, 10000);
+      }, 1000);
     }
 
     return () => {
       clearInterval(statusWatchInterval);
     };
-  }, [startStatusWatching, checkBookStatus]);
+  }, [startStatusWatching, VCID]);
+
+  useEffect(() => {
+    if (parkingData?.state) {
+      setOpenNoData(false);
+
+      if (!startStatusWatching && parkingData.state > 3) {
+        setStartStatusWatching(true);
+      }
+    }
+  }, [parkingData, startStatusWatching]);
 
   useEffect(() => {
     const targetTime = dayjs().add(1, 'hour');
@@ -201,7 +180,7 @@ export const Home = () => {
         <div
           className={
             'footer-container' +
-            (openOrder ? ' __open' : '') +
+            (parkingData?.state > 0 ? ' __open' : '') +
             (openSubmissionTime || openTimePicker ? ' __overlay' : '')
           }
           onClick={(e) => {
@@ -212,19 +191,23 @@ export const Home = () => {
           }}
         >
           {parkingData ? (
-            <Order parkingData={parkingData} setOpenSubmissionTime={setOpenSubmissionTime} />
-          ) : null}
-        </div>
-
-        <div className={'footer-container' + (showOrderInfo ? ' __open' : '')}>
-          {parkingData ? (
-            <OrderInfo
+            <Order
+              parkingData={parkingData}
               setOpenTimePicker={setOpenTimePicker}
               setOpenSubmissionTime={setOpenSubmissionTime}
-              parkingData={parkingData}
             />
           ) : null}
         </div>
+
+        {/*<div className={'footer-container' + (parkingData?.state > 3 ? ' __open' : '')}>*/}
+        {/*  {parkingData ? (*/}
+        {/*    <OrderInfo*/}
+        {/*      setOpenTimePicker={setOpenTimePicker}*/}
+        {/*      setOpenSubmissionTime={setOpenSubmissionTime}*/}
+        {/*      parkingData={parkingData}*/}
+        {/*    />*/}
+        {/*  ) : null}*/}
+        {/*</div>*/}
 
         <div className={'footer-container' + (openSubmissionTime ? ' __open' : '')}>
           <SubmissionTime
@@ -267,7 +250,6 @@ export const Home = () => {
                 console.log('send request', rtPicker.getDate());
                 sendBookRequest();
                 setOpenTimePicker(false);
-                setOpenOrder(false);
               }
 
               // eslint-disable-next-line no-console

@@ -1,9 +1,9 @@
 .dev-block {
-  z-index: 2;
+  z-index: 5;
   position: fixed;
   top: 0;
   left: 0;
-  width: 200px;
+  max-width: 200px;
   padding: 10px;
   background: red;
   display: flex;
