@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import Rolldate from 'pickerjs';
@@ -13,42 +13,45 @@ import { DevBlock } from '../components/DevBlock';
 import { PageOverlay } from '../components/PageOverlay';
 
 let rtPicker = null;
+let statusWatchInterval = 0;
 
 export const Home = () => {
   const now = dayjs();
   const pickerInputRef = useRef(null);
   const rollDateRef = useRef(null);
+  const [orderState, setOrderState] = useState(0);
   const [pickerMode, setPickerMode] = useState('today');
   const [openTimePicker, setOpenTimePicker] = useState(false);
   const [openOrder, setOpenOrder] = useState(false);
   const [openNoData, setOpenNoData] = useState(false);
   const [showOrderInfo, setShowOrderInfo] = useState(false);
   const [openSubmissionTime, setOpenSubmissionTime] = useState(false);
+  const [startStatusWatching, setStartStatusWatching] = useState(false);
   const [submissionDate, setSubmissionDate] = useState(now);
   const [parkingData, setParkingData] = useState(null); // fixtures
   let [searchParams, setSearchParams] = useSearchParams();
 
-  const checkBookStatus = () => {
+  const checkBookStatus = useCallback(() => {
     const VCID = searchParams.get('VCID');
 
     apiFetchGet('status/?id=' + VCID).then((d) => {
       // eslint-disable-next-line no-console
       console.log('fetch status', d);
-    });
-  };
 
-  const sendBookRequest = () => {
+      setParkingData({ ...parkingData, status: d });
+    });
+  }, [parkingData, searchParams]);
+
+  const sendBookRequest = useCallback(() => {
     const VCID = searchParams.get('VCID');
     apiFetchPost({ date: dayjs(rtPicker.getDate()).format(DATE_FORMAT), id: VCID }, 'book/').then(
       (r) => {
         // eslint-disable-next-line no-console
         console.log('sendBookRequest', r);
         setParkingData(r);
-
-        checkBookStatus();
       },
     );
-  };
+  }, [searchParams]);
 
   useEffect(() => {
     // eslint-disable-next-line no-console
@@ -93,13 +96,26 @@ export const Home = () => {
     if (parkingData) {
       setOpenNoData(false);
 
-      if (parkingData?.state === 4) {
+      if (!startStatusWatching && [4, 5, 6, 7].indexOf(parkingData.state) > -1) {
         setShowOrderInfo(true);
+        setStartStatusWatching(true);
       } else {
         setOpenOrder(true);
       }
     }
-  }, [parkingData]);
+  }, [parkingData, startStatusWatching]);
+
+  useEffect(() => {
+    if (startStatusWatching) {
+      statusWatchInterval = setInterval(() => {
+        checkBookStatus();
+      }, 10000);
+    }
+
+    return () => {
+      clearInterval(statusWatchInterval);
+    };
+  }, [startStatusWatching, checkBookStatus]);
 
   useEffect(() => {
     const targetTime = dayjs().add(1, 'hour');

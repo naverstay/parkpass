@@ -9,7 +9,9 @@ export const Order = ({ parkingData, setOpenSubmissionTime }) => {
         <div className="text">{parkingData?.parking?.address}</div>
       </div>
 
-      <OrderData parkingData={parkingData} />
+      <div className="order-container">
+        <OrderData parkingData={parkingData} />
+      </div>
 
       <div className="order-footer">
         <button
