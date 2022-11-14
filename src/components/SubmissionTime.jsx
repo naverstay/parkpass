@@ -1,4 +1,6 @@
 import React from 'react';
+import dayjs from 'dayjs';
+import { DATE_FORMAT } from '../api/api';
 
 export const SubmissionTime = ({
   setOpenSubmissionTime,
@@ -29,6 +31,13 @@ export const SubmissionTime = ({
             setOpenSubmissionTime(false);
             // eslint-disable-next-line no-console
             console.log('send request', rtPicker.getDate());
+
+            const time = dayjs();
+            const date = dayjs(rtPicker.getDate());
+
+            if (date.diff(time, 'm') < 10) {
+              rtPicker.setDate(time.add(11, 'm').format(DATE_FORMAT)).render();
+            }
 
             sendBookRequest();
           }}

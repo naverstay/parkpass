@@ -5,6 +5,7 @@ import Rolldate from 'pickerjs';
 
 import { Order } from '../components/Order';
 import { API_URL, apiFetchGet, apiFetchPost, DATE_FORMAT, fixtures, MEDIA_URL } from '../api/api';
+import { Header } from '../components/Header';
 import { Submission } from '../components/Submission';
 import { SubmissionTime } from '../components/SubmissionTime';
 import { NoData } from '../components/NoData';
@@ -18,7 +19,7 @@ dayjs.extend(dayjsPluginUTC);
 let rtPicker = null;
 let statusWatchInterval = 0;
 
-export const Home = () => {
+export const Home = ({ windowScrollTop }) => {
   const now = dayjs();
   const pickerInputRef = useRef(null);
   const rollDateRef = useRef(null);
@@ -196,21 +197,12 @@ export const Home = () => {
     <>
       <DevBlock />
       {/* todo remove DevBlock */}
-      <div className="header">
-        <div className="container">
-          <div className="header-inner">
-            <span>PARKPASS VALET SERVICE</span>
-            {parkingData?.parking?.picture ? (
-              <img src={MEDIA_URL + parkingData?.parking?.picture} alt="place" />
-            ) : null}
-          </div>
-        </div>
-      </div>
+      <Header windowScrollTop={windowScrollTop} parkingData={parkingData} />
 
-      <div className="footer">
+      <div className="booking">
         <div
           className={
-            'footer-container' +
+            'booking-container' +
             (parkingData?.state > 0 ? ' __open' : '') +
             (openSubmissionTime || openTimePicker ? ' __overlay' : '')
           }
@@ -224,6 +216,7 @@ export const Home = () => {
           {parkingData ? (
             <div className="container">
               <Order
+                windowScrollTop={windowScrollTop}
                 parkingData={parkingData}
                 setOpenTimePicker={setOpenTimePicker}
                 setOpenSubmissionTime={setOpenSubmissionTime}
@@ -232,7 +225,7 @@ export const Home = () => {
           ) : null}
         </div>
 
-        {/*<div className={'footer-container' + (parkingData?.state > 3 ? ' __open' : '')}>*/}
+        {/*<div className={'booking-container' + (parkingData?.state > 3 ? ' __open' : '')}>*/}
         {/*  {parkingData ? (*/}
         {/*    <OrderInfo*/}
         {/*      setOpenTimePicker={setOpenTimePicker}*/}
@@ -242,7 +235,7 @@ export const Home = () => {
         {/*  ) : null}*/}
         {/*</div>*/}
 
-        <div className={'footer-container' + (openSubmissionTime ? ' __open' : '')}>
+        <div className={'booking-container' + (openSubmissionTime ? ' __open' : '')}>
           <div className="container">
             <SubmissionTime
               setOpenSubmissionTime={setOpenSubmissionTime}
@@ -253,13 +246,13 @@ export const Home = () => {
           </div>
         </div>
 
-        <div className={'footer-container' + (openNoData ? ' __open' : '')}>
+        <div className={'booking-container' + (openNoData ? ' __open' : '')}>
           <div className="container">
             <NoData />
           </div>
         </div>
 
-        <div className={'footer-container' + (openTimePicker ? ' __open' : '')}>
+        <div className={'booking-container' + (openTimePicker ? ' __open' : '')}>
           <div className="container">
             <Submission
               pickerMode={pickerMode}

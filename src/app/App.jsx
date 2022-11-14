@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { Home } from '../pages/Home';
@@ -11,6 +11,7 @@ import Clock from '../ico/clock.svg';
 import Info from '../ico/info.svg';
 import { SurveyPage } from '../pages/SurveyPage';
 import { RatingPage } from '../pages/RatingPage';
+import { getScrollTop } from '../helpers/functions';
 
 const svgData = 'url("data:image/svg+xml,';
 
@@ -46,14 +47,29 @@ export const App = () => {
   //  appHeight();
   //}, [windowSize]);
 
+  const [windowScrollTop, setWindowScrollTop] = useState(getScrollTop());
+  const handleScroll = (e) => {
+    setWindowScrollTop(getScrollTop());
+    // eslint-disable-next-line no-console
+    console.log('handleScroll', getScrollTop());
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
     <div className="page">
       <style>{css}</style>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/survey" element={<SurveyPage />} />
-          <Route path="/rating" element={<RatingPage />} />
+          <Route path="/" element={<Home windowScrollTop={windowScrollTop} />} />
+          <Route path="/survey" element={<SurveyPage windowScrollTop={windowScrollTop} />} />
+          <Route path="/rating" element={<RatingPage windowScrollTop={windowScrollTop} />} />
         </Routes>
       </BrowserRouter>
     </div>

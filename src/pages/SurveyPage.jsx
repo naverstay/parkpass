@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { API_URL, apiFetchGet, fixtures, MEDIA_URL } from '../api/api';
+import { Header } from '../components/Header';
 import { Survey } from '../components/Survey';
 import { NoData } from '../components/NoData';
 import { PageOverlay } from '../components/PageOverlay';
 
-export const SurveyPage = () => {
+export const SurveyPage = ({ windowScrollTop }) => {
   const [openSurvey, setOpenSurvey] = useState(false);
   const [openRatings, setOpenRatings] = useState(false);
   const [openNoData, setOpenNoData] = useState(false);
@@ -40,20 +41,15 @@ export const SurveyPage = () => {
 
   return (
     <>
-      <div className="header">
-        <span>PARKPASS VALET SERVICE</span>
-        {parkingData?.parking?.picture ? (
-          <img src={MEDIA_URL + parkingData?.parking?.picture} alt="place" />
-        ) : null}
-      </div>
+      <Header parkingData={parkingData} windowScrollTop={windowScrollTop} />
 
-      <div className="footer">
-        <div className={'footer-container' + (openNoData ? ' __open' : '')}>
+      <div className="booking">
+        <div className={'booking-container' + (openNoData ? ' __open' : '')}>
           <NoData />
         </div>
 
         <div
-          className={'footer-container' + (openSurvey ? ' __open' : '')}
+          className={'booking-container' + (openSurvey ? ' __open' : '')}
           onClick={(e) => {
             if (e.target?.classList?.contains('__overlay')) {
               //setOpenSurvey(false);

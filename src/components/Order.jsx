@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import dayjs from 'dayjs';
 import { OrderData } from './OrderData';
 import { Progress } from './Progress';
@@ -7,8 +7,14 @@ import dayjsPluginUTC from 'dayjs-plugin-utc';
 
 dayjs.extend(dayjsPluginUTC);
 
-export const Order = ({ parkingData, setOpenSubmissionTime, setOpenTimePicker }) => {
+export const Order = ({
+  parkingData,
+  setOpenSubmissionTime,
+  setOpenTimePicker,
+  windowScrollTop,
+}) => {
   const { state } = parkingData;
+  const orderHeaderRef = useRef(null);
 
   const submissionStatus = useMemo(() => {
     const STATUSES = [
@@ -31,9 +37,23 @@ export const Order = ({ parkingData, setOpenSubmissionTime, setOpenTimePicker })
     return parkingData?.car_delivery_time ? dayjs(parkingData.car_delivery_time) : '';
   }, [parkingData]);
 
+  useEffect(() => {
+    const el = orderHeaderRef.current;
+    const observer = new IntersectionObserver(
+      ([e]) => e.target.classList.toggle('__pinned', e.intersectionRatio < 1),
+      { threshold: [1] },
+    );
+
+    observer.observe(el);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   return (
     <div className="order">
-      <div className="order-top">
+      <div ref={orderHeaderRef} className="order-top">
         <div className="title">{parkingData?.parking?.name}</div>
         <div className="text">{parkingData?.parking?.address}</div>
       </div>
@@ -80,7 +100,7 @@ export const Order = ({ parkingData, setOpenSubmissionTime, setOpenTimePicker })
         )}
       </div>
 
-      <div className="order-footer">
+      <div className="order-booking">
         {[4, 5, 6].indexOf(state) > -1 ? (
           <Progress parkingData={parkingData} />
         ) : state === 7 ? (

@@ -6,8 +6,9 @@ import { API_URL, apiFetchGet, apiFetchPost, DATE_FORMAT, fixtures, MEDIA_URL } 
 import { Rating } from '../components/Rating';
 import { NoData } from '../components/NoData';
 import { PageOverlay } from '../components/PageOverlay';
+import { Header } from '../components/Header';
 
-export const RatingPage = () => {
+export const RatingPage = ({ windowScrollTop }) => {
   const [openRating, setOpenRating] = useState(false);
   const [openNoData, setOpenNoData] = useState(false);
 
@@ -41,20 +42,15 @@ export const RatingPage = () => {
 
   return (
     <>
-      <div className="header">
-        <span>PARKPASS VALET SERVICE</span>
-        {parkingData?.parking?.picture ? (
-          <img src={MEDIA_URL + parkingData?.parking?.picture} alt="place" />
-        ) : null}
-      </div>
+      <Header parkingData={parkingData} windowScrollTop={windowScrollTop} />
 
-      <div className="footer">
-        <div className={'footer-container' + (openNoData ? ' __open' : '')}>
+      <div className="booking">
+        <div className={'booking-container' + (openNoData ? ' __open' : '')}>
           <NoData />
         </div>
 
         <div
-          className={'footer-container' + (openRating ? ' __open' : '')}
+          className={'booking-container' + (openRating ? ' __open' : '')}
           onClick={(e) => {
             if (e.target?.classList?.contains('__overlay')) {
               //setOpenRating(false);

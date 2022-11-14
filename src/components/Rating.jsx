@@ -83,7 +83,7 @@ export const Rating = ({ parkingData }) => {
         </div>
       </div>
 
-      <div className="order-footer">
+      <div className="order-booking">
         <Progress parkingData={parkingData} />
       </div>
     </div>

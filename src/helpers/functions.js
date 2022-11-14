@@ -1,5 +1,7 @@
 import dayjs from 'dayjs';
 
+export const CHECK_STATUS_TIMER = 5000;
+
 export function debounce(fn, ms) {
   let timer;
   return (_) => {
@@ -44,4 +46,6 @@ export const dateDiff = (d1, d2, p) => {
   }
 };
 
-export const CHECK_STATUS_TIMER = 5000;
+export const getScrollTop = () => {
+  return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+};

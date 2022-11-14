@@ -76,7 +76,7 @@ export const OrderInfo = ({ parkingData, setOpenTimePicker, setOpenSubmissionTim
       {submissionTime ? (
         <Progress parkingData={parkingData} />
       ) : (
-        <div className="order-footer">
+        <div className="order-booking">
           <button
             className="btn btn-green"
             onClick={() => {

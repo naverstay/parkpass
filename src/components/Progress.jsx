@@ -66,7 +66,7 @@ export const Progress = ({ parkingData }) => {
   }, [submissionDuration, submissionPeriod]);
 
   return (
-    <div className="order-footer">
+    <div className="order-booking">
       <ProgressBar text={'Осталось: ' + timeLeft} percent={100 - percentLeft} />
     </div>
   );
