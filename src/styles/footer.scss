@@ -38,7 +38,8 @@
 
     .container {
       border-radius: 20px 20px 0 0;
-      overflow: hidden;
+      box-shadow: 0 -5px 50px rgba(0, 0, 0, 0.75);
+      background: linear-gradient(180.05deg, #081a90 -4.3%, #000a4e 99.96%);
     }
 
     &::before {
