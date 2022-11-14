@@ -18,12 +18,10 @@ export const leadZero = (val) => {
 };
 
 export const getClosestTime = (d2, step, param) => {
-  let date2 = dayjs(d2);
-  const val = date2.get(param);
-
-  date2 = date2.set(param, val + (val % step));
-
-  return date2;
+  let ret = dayjs(d2);
+  const val = ret.get(param);
+  ret = ret.set(param, step + val - (val % step));
+  return ret;
 };
 
 export const dateDiff = (d1, d2, p) => {
