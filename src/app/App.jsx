@@ -50,8 +50,6 @@ export const App = () => {
   const [windowScrollTop, setWindowScrollTop] = useState(getScrollTop());
   const handleScroll = (e) => {
     setWindowScrollTop(getScrollTop());
-    // eslint-disable-next-line no-console
-    console.log('handleScroll', getScrollTop());
   };
 
   useEffect(() => {

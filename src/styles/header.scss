@@ -1,9 +1,17 @@
 .header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
 
   &-inner {
     position: relative;
     overflow: hidden;
-    height: 189px;
+    height: 360px;
+    display: flex;
+    flex-flow: column;
+    justify-content: flex-end;
+    align-items: stretch;
 
     &__text {
       z-index: 3;
@@ -21,6 +29,8 @@
 
     &__img {
       position: relative;
+      margin: 0 auto;
+      min-height: 186px;
 
       img {
         display: block;

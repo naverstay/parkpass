@@ -17,6 +17,11 @@ export const leadZero = (val) => {
   return String('0' + val).slice(-2);
 };
 
+export const getClosestTime = (d1, d2, step) => {
+  const date1 = dayjs(d1);
+  const date2 = dayjs(d2);
+};
+
 export const dateDiff = (d1, d2, p) => {
   const date1 = dayjs(d1);
   const date2 = dayjs(d2);
