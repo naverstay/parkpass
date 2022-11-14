@@ -1,8 +1,10 @@
 .header {
-  height: 189px;
-  position: relative;
-  overflow: hidden;
-  margin-bottom: -19px;
+
+  &-inner {
+    position: relative;
+    overflow: hidden;
+    height: 189px;
+  }
 
   span {
     z-index: 1;

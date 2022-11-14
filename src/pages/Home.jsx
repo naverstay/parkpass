@@ -197,10 +197,14 @@ export const Home = () => {
       <DevBlock />
       {/* todo remove DevBlock */}
       <div className="header">
-        <span>PARKPASS VALET SERVICE</span>
-        {parkingData?.parking?.picture ? (
-          <img src={MEDIA_URL + parkingData?.parking?.picture} alt="place" />
-        ) : null}
+        <div className="container">
+          <div className="header-inner">
+            <span>PARKPASS VALET SERVICE</span>
+            {parkingData?.parking?.picture ? (
+              <img src={MEDIA_URL + parkingData?.parking?.picture} alt="place" />
+            ) : null}
+          </div>
+        </div>
       </div>
 
       <div className="footer">
@@ -218,11 +222,13 @@ export const Home = () => {
           }}
         >
           {parkingData ? (
-            <Order
-              parkingData={parkingData}
-              setOpenTimePicker={setOpenTimePicker}
-              setOpenSubmissionTime={setOpenSubmissionTime}
-            />
+            <div className="container">
+              <Order
+                parkingData={parkingData}
+                setOpenTimePicker={setOpenTimePicker}
+                setOpenSubmissionTime={setOpenSubmissionTime}
+              />
+            </div>
           ) : null}
         </div>
 
@@ -237,52 +243,58 @@ export const Home = () => {
         {/*</div>*/}
 
         <div className={'footer-container' + (openSubmissionTime ? ' __open' : '')}>
-          <SubmissionTime
-            setOpenSubmissionTime={setOpenSubmissionTime}
-            setOpenTimePicker={setOpenTimePicker}
-            rtPicker={rtPicker}
-            sendBookRequest={sendBookRequest}
-          />
+          <div className="container">
+            <SubmissionTime
+              setOpenSubmissionTime={setOpenSubmissionTime}
+              setOpenTimePicker={setOpenTimePicker}
+              rtPicker={rtPicker}
+              sendBookRequest={sendBookRequest}
+            />
+          </div>
         </div>
 
         <div className={'footer-container' + (openNoData ? ' __open' : '')}>
-          <NoData />
+          <div className="container">
+            <NoData />
+          </div>
         </div>
 
         <div className={'footer-container' + (openTimePicker ? ' __open' : '')}>
-          <Submission
-            pickerMode={pickerMode}
-            setPickerMode={setPickerMode}
-            setSubmissionDate={setSubmissionDate}
-            pickerInputRef={pickerInputRef}
-            setOpenTimePicker={setOpenTimePicker}
-            rtPicker={rtPicker}
-            rollDateRef={rollDateRef}
-            onSubmit={() => {
-              // eslint-disable-next-line no-console
-
-              const time = dayjs();
-              const date = dayjs(rtPicker.getDate());
-
-              if (date.diff(time, 'm') < 10) {
-                rtPicker.setDate(time.add(11, 'm').format(DATE_FORMAT)).render();
-                setPickerMode('today');
-                return false;
-              }
-
-              if (pickerMode === 'date') {
-                setPickerMode('time');
-              } else {
+          <div className="container">
+            <Submission
+              pickerMode={pickerMode}
+              setPickerMode={setPickerMode}
+              setSubmissionDate={setSubmissionDate}
+              pickerInputRef={pickerInputRef}
+              setOpenTimePicker={setOpenTimePicker}
+              rtPicker={rtPicker}
+              rollDateRef={rollDateRef}
+              onSubmit={() => {
                 // eslint-disable-next-line no-console
-                console.log('send request', rtPicker.getDate());
-                sendBookRequest();
-                setOpenTimePicker(false);
-              }
 
-              // eslint-disable-next-line no-console
-              console.log(rtPicker.getDate(), date.diff(time, 'm'));
-            }}
-          />
+                const time = dayjs();
+                const date = dayjs(rtPicker.getDate());
+
+                if (date.diff(time, 'm') < 10) {
+                  rtPicker.setDate(time.add(11, 'm').format(DATE_FORMAT)).render();
+                  setPickerMode('today');
+                  return false;
+                }
+
+                if (pickerMode === 'date') {
+                  setPickerMode('time');
+                } else {
+                  // eslint-disable-next-line no-console
+                  console.log('send request', rtPicker.getDate());
+                  sendBookRequest();
+                  setOpenTimePicker(false);
+                }
+
+                // eslint-disable-next-line no-console
+                console.log(rtPicker.getDate(), date.diff(time, 'm'));
+              }}
+            />
+          </div>
         </div>
       </div>
 

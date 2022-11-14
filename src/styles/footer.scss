@@ -4,8 +4,6 @@
   top: 100%;
   right: 0;
   left: 0;
-  max-width: var(--app-width);
-  margin: 0 auto;
   display: flex;
   flex-flow: column-reverse;
   justify-content: stretch;
@@ -34,11 +32,14 @@
     right: 0;
     left: 0;
     position: absolute;
-    border-radius: 20px 20px 0 0;
     max-height: var(--app-height);
-    overflow: hidden;
     transition: transform .3s;
     transform: translateY(calc(100% + 100px));
+
+    .container {
+      border-radius: 20px 20px 0 0;
+      overflow: hidden;
+    }
 
     &::before {
       transition: opacity .3s;

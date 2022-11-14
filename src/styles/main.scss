@@ -53,12 +53,15 @@ body {
 }
 
 .page {
-  margin: 0 auto;
-  max-width: var(--app-width);
   min-height: var(--app-height);
   display: flex;
   flex-flow: column nowrap;
   position: relative;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: var(--app-width);
 }
 
 .overlay {
