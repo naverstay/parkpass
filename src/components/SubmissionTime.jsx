@@ -30,17 +30,9 @@ export const SubmissionTime = ({
           className="btn btn-green"
           onClick={() => {
             setOpenSubmissionTime(false);
-            // eslint-disable-next-line no-console
-            console.log('send request', rtPicker.getDate());
-
-            const time = dayjs();
-            const date = dayjs(rtPicker.getDate());
-
-            if (date.diff(time, 'm') < 10) {
-              rtPicker
-                .setDate(getClosestTime(dayjs().add(10, 'm'), 5, 'm').format(DATE_FORMAT))
-                .render();
-            }
+            rtPicker
+              .setDate(getClosestTime(dayjs().add(10, 'm'), 5, 'm').format(DATE_FORMAT))
+              .render();
 
             sendBookRequest();
           }}
