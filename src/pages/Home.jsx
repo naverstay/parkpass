@@ -19,6 +19,8 @@ dayjs.extend(dayjsPluginUTC);
 let rtPicker = null;
 let statusWatchInterval = 0;
 
+window.RolldateT = Rolldate;
+
 export const Home = ({ windowScrollTop }) => {
   const now = dayjs();
   const pickerInputRef = useRef(null);
@@ -153,15 +155,7 @@ export const Home = ({ windowScrollTop }) => {
         container: rollDateRef.current,
         text: lang,
         rows: 3,
-        increment: {
-          year: 1,
-          month: 1,
-          day: 1,
-          hour: 1,
-          minute: 5,
-          second: 10,
-          millisecond: 100,
-        },
+        increment: 5,
         inline: true,
         format: DATE_FORMAT,
         value: targetTime.format(DATE_FORMAT),

@@ -1,8 +1,10 @@
 .submission {
-  background: #f3f3f3;
+  pointer-events: all;
 
   &-top {
     padding: 18px 0;
+    border-radius: 20px 20px 0 0;
+    background: #f3f3f3;
   }
 
   &-time {
@@ -71,8 +73,6 @@
 
     .picker-body {
       position: relative;
-
-
     }
 
     .picker-item {
@@ -187,6 +187,7 @@
     gap: 16px;
     align-items: center;
     justify-content: space-between;
+    background: #f3f3f3;
     border-top: 1px solid rgba(0, 0, 0, 0.1);
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 
@@ -203,6 +204,7 @@
   }
 
   &-confirm {
+    background: #f3f3f3;
     display: grid;
     gap: 18px;
     grid-template-columns: 1fr 1fr;

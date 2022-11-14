@@ -49,7 +49,7 @@
       content: '';
       z-index: 3;
       position: absolute;
-      top: 0;
+      top: -400px;
       bottom: 0;
       left: 0;
       right: 0;
@@ -68,7 +68,19 @@
     &.__open {
       display: block;
       //transform: translateY(0);
+
+      ~ .__open {
+        pointer-events: none;
+        position: fixed;
+        z-index: 3;
+        bottom: 0;
+        left: 0;
+        right: 0;
+
+        &::before {
+          opacity: 0 !important;
+        }
+      }
     }
   }
-
 }
