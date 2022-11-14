@@ -81,6 +81,16 @@ export const Home = () => {
   }, [submissionDate]);
 
   useEffect(() => {
+    rtPicker
+      ?.setDate(
+        dayjs()
+          .add(pickerMode === 'today' ? 0 : 1, 'd')
+          .format(DATE_FORMAT),
+      )
+      .render();
+  }, [pickerMode]);
+
+  useEffect(() => {
     const checkBookStatus = () => {
       apiFetchGet('status/?id=' + VCID).then((d) => {
         if (d?.session_status) {

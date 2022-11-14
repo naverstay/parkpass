@@ -41,10 +41,10 @@ const appHeight = () => {
 };
 
 export const App = () => {
-  const windowSize = useWindowDimension().join(',');
-  useEffect(() => {
-    appHeight();
-  }, [windowSize]);
+  //const windowSize = useWindowDimension().join(',');
+  //useEffect(() => {
+  //  appHeight();
+  //}, [windowSize]);
 
   return (
     <div className="page">
