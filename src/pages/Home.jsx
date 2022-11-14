@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import dayjs from 'dayjs';
-import Rolldate from '../vendor/picker.min';
+import Rolldate from '../vendor/picker.esm';
 
 import { Order } from '../components/Order';
 import { API_URL, apiFetchGet, apiFetchPost, DATE_FORMAT, fixtures, MEDIA_URL } from '../api/api';
@@ -19,8 +19,6 @@ dayjs.extend(dayjsPluginUTC);
 
 let rtPicker = null;
 let statusWatchInterval = 0;
-
-window.RolldateT = Rolldate;
 
 export const Home = ({ windowScrollTop }) => {
   const now = dayjs();
