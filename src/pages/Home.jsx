@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import dayjs from 'dayjs';
-//import Rolldate from 'pickerjs';
 import Rolldate from '../vendor/picker.min';
 
 import { Order } from '../components/Order';
@@ -13,7 +12,7 @@ import { NoData } from '../components/NoData';
 import { DevBlock } from '../components/DevBlock';
 import { PageOverlay } from '../components/PageOverlay';
 import dayjsPluginUTC from 'dayjs-plugin-utc';
-import { CHECK_STATUS_TIMER } from '../helpers/functions';
+import { CHECK_STATUS_TIMER, getClosestTime } from '../helpers/functions';
 import { NoConnection } from '../components/NoConnection';
 
 dayjs.extend(dayjsPluginUTC);
@@ -87,7 +86,7 @@ export const Home = ({ windowScrollTop }) => {
     let date = submissionDate || dayjs();
 
     if (date.diff(time, 'm') < 10) {
-      date = time.add(11, 'm');
+      date = getClosestTime(dayjs().add(10, 'm'), 5, 'm');
     }
 
     rtPicker?.setDate(date.format(DATE_FORMAT)).render();
@@ -269,7 +268,9 @@ export const Home = ({ windowScrollTop }) => {
                 const date = dayjs(rtPicker.getDate());
 
                 if (date.diff(time, 'm') < 10) {
-                  rtPicker.setDate(time.add(11, 'm').format(DATE_FORMAT)).render();
+                  rtPicker
+                    .setDate(getClosestTime(dayjs().add(10, 'm'), 5, 'm').format(DATE_FORMAT))
+                    .render();
                   setPickerMode('today');
                   return false;
                 }

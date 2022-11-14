@@ -1,10 +1,10 @@
 import React from 'react';
 
-export const NoData = () => {
+export const NoConnection = () => {
   return (
     <div className="submission">
       <div className="submission-top">
-        <div className="title">Нет данных</div>
+        <div className="title">Нет связи с сервером</div>
       </div>
     </div>
   );

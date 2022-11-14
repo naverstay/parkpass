@@ -1,6 +1,7 @@
 import React from 'react';
 import dayjs from 'dayjs';
 import { DATE_FORMAT } from '../api/api';
+import { getClosestTime } from '../helpers/functions';
 
 export const SubmissionTime = ({
   setOpenSubmissionTime,
@@ -36,7 +37,9 @@ export const SubmissionTime = ({
             const date = dayjs(rtPicker.getDate());
 
             if (date.diff(time, 'm') < 10) {
-              rtPicker.setDate(time.add(11, 'm').format(DATE_FORMAT)).render();
+              rtPicker
+                .setDate(getClosestTime(dayjs().add(10, 'm'), 5, 'm').format(DATE_FORMAT))
+                .render();
             }
 
             sendBookRequest();

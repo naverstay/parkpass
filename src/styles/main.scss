@@ -1,6 +1,6 @@
 @import "fonts";
 @import '../../node_modules/css-reset-and-normalize/scss/reset-and-normalize';
-@import "~pickerjs/dist/picker.css";
+@import "../vendor/picker.min.css";
 @import "vars";
 @import "mixins";
 @import "buttons";
