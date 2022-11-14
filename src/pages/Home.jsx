@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import dayjs from 'dayjs';
-import Rolldate from 'pickerjs';
+//import Rolldate from 'pickerjs';
+import Rolldate from '../vendor/picker.min';
 
 import { Order } from '../components/Order';
 import { API_URL, apiFetchGet, apiFetchPost, DATE_FORMAT, fixtures, MEDIA_URL } from '../api/api';
@@ -13,6 +14,7 @@ import { DevBlock } from '../components/DevBlock';
 import { PageOverlay } from '../components/PageOverlay';
 import dayjsPluginUTC from 'dayjs-plugin-utc';
 import { CHECK_STATUS_TIMER } from '../helpers/functions';
+import { NoConnection } from '../components/NoConnection';
 
 dayjs.extend(dayjsPluginUTC);
 
@@ -27,6 +29,7 @@ export const Home = ({ windowScrollTop }) => {
   const rollDateRef = useRef(null);
   const [pickerMode, setPickerMode] = useState('today');
   const [openNoData, setOpenNoData] = useState(false);
+  const [openConnectionError, setOpenConnectionError] = useState(false);
   const [openTimePicker, setOpenTimePicker] = useState(false);
   const [openSubmissionTime, setOpenSubmissionTime] = useState(false);
   const [startStatusWatching, setStartStatusWatching] = useState(false);
@@ -54,12 +57,19 @@ export const Home = ({ windowScrollTop }) => {
   useEffect(() => {
     if (P && VCID) {
       // todo
-      apiFetchGet('get/?id=' + VCID + '&P=' + P).then((d) => {
-        // eslint-disable-next-line no-console
-        console.log('fetch get', d);
+      apiFetchGet('get/?id=' + VCID + '&P=' + P)
+        .then((d) => {
+          setOpenConnectionError(false);
+          // eslint-disable-next-line no-console
+          console.log('fetch get', d);
 
-        setParkingData(d);
-      });
+          setParkingData(d);
+        })
+        .catch((e) => {
+          setOpenConnectionError(true);
+          // eslint-disable-next-line no-console
+          console.log('apiFetchGet', e);
+        });
     } else {
       setOpenNoData(true);
     }
@@ -155,30 +165,32 @@ export const Home = ({ windowScrollTop }) => {
         container: rollDateRef.current,
         text: lang,
         rows: 3,
-        increment: 5,
+        increment: {
+          minute: 5,
+        },
         inline: true,
         format: DATE_FORMAT,
         value: targetTime.format(DATE_FORMAT),
-        beginYear: targetTime.format('YYYY'),
-        endYear: parseInt(targetTime.format('YYYY')) + 1,
-        init: function (e) {
-          // eslint-disable-next-line no-console
-          console.log('init');
-        },
-        moveEnd: function (scroll) {
-          // eslint-disable-next-line no-console
-          console.log('moveEnd', scroll);
-        },
-        confirm: function (date) {
-          // eslint-disable-next-line no-console
-          console.log(date);
-          // eslint-disable-next-line no-console
-          console.log('confirm', date);
-        },
-        cancel: function () {
-          // eslint-disable-next-line no-console
-          console.log('cancel');
-        },
+        //beginYear: targetTime.format('YYYY'),
+        //endYear: parseInt(targetTime.format('YYYY')) + 1,
+        //init: function (e) {
+        //  // eslint-disable-next-line no-console
+        //  console.log('init');
+        //},
+        //moveEnd: function (scroll) {
+        //  // eslint-disable-next-line no-console
+        //  console.log('moveEnd', scroll);
+        //},
+        //confirm: function (date) {
+        //  // eslint-disable-next-line no-console
+        //  console.log(date);
+        //  // eslint-disable-next-line no-console
+        //  console.log('confirm', date);
+        //},
+        //cancel: function () {
+        //  // eslint-disable-next-line no-console
+        //  console.log('cancel');
+        //},
       });
 
       // eslint-disable-next-line no-console
@@ -240,12 +252,6 @@ export const Home = ({ windowScrollTop }) => {
           </div>
         </div>
 
-        <div className={'booking-container' + (openNoData ? ' __open' : '')}>
-          <div className="container">
-            <NoData />
-          </div>
-        </div>
-
         <div className={'booking-container' + (openTimePicker ? ' __open' : '')}>
           <div className="container">
             <Submission
@@ -281,6 +287,18 @@ export const Home = ({ windowScrollTop }) => {
                 console.log(rtPicker.getDate(), date.diff(time, 'm'));
               }}
             />
+          </div>
+        </div>
+
+        <div className={'booking-container' + (openNoData ? ' __open' : '')}>
+          <div className="container">
+            <NoData />
+          </div>
+        </div>
+
+        <div className={'booking-container' + (openConnectionError ? ' __open' : '')}>
+          <div className="container">
+            <NoConnection />
           </div>
         </div>
       </div>
