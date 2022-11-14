@@ -2,6 +2,7 @@
   height: 189px;
   position: relative;
   overflow: hidden;
+  margin-bottom: -19px;
 
   span {
     z-index: 1;
@@ -19,7 +20,6 @@
 
   img {
     @include img_center();
-    max-width: 640px;
-    max-height: 300px;
+    max-width: 100%;
   }
 }

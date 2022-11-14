@@ -35,7 +35,7 @@
     left: 0;
     position: absolute;
     border-radius: 20px 20px 0 0;
-    max-height: calc(var(--app-height) - 50px);
+    max-height: var(--app-height);
     overflow: hidden;
     transition: transform .3s;
     transform: translateY(calc(100% + 100px));
