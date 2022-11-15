@@ -64,12 +64,12 @@ export const Progress = ({ parkingData }) => {
   // (NOW - submissionStartedAt) / (car_delivery_time - request.created_at)
 
   // eslint-disable-next-line no-console
-  //console.log('submissionPeriod', percentLeft, submissionDuration, submissionPeriod);
+  //console.log('submissionPeriod', percentLeft, submissionPeriod, submissionPeriod);
 
   return (
     <ProgressBar
       text={timeLeft ? 'Осталось: ' + timeLeft : 'Время вышло'}
-      percent={timeLeft ? percentLeft : 100}
+      percent={timeLeft ? 100 - percentLeft : 100}
     />
   );
 };
