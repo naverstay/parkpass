@@ -1,7 +1,10 @@
 import React from 'react';
 import dayjs from 'dayjs';
+import dayjsPluginUTC from 'dayjs-plugin-utc';
 import { DATE_FORMAT } from '../api/api';
 import { getClosestTime } from '../helpers/functions';
+
+dayjs.extend(dayjsPluginUTC);
 
 export const SubmissionTime = ({
   setOpenSubmissionTime,

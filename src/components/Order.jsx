@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import dayjs from 'dayjs';
+import dayjsPluginUTC from 'dayjs-plugin-utc';
 import { OrderData } from './OrderData';
 import { Progress } from './Progress';
 import { ProgressBar } from './ProgressBar';
-import dayjsPluginUTC from 'dayjs-plugin-utc';
 
 dayjs.extend(dayjsPluginUTC);
 

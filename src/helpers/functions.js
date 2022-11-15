@@ -1,4 +1,10 @@
 import dayjs from 'dayjs';
+import dayjsPluginUTC from 'dayjs-plugin-utc';
+import duration from 'dayjs/plugin/duration';
+import { DATE_FORMAT } from '../api/api';
+
+dayjs.extend(dayjsPluginUTC);
+dayjs.extend(duration);
 
 export const CHECK_STATUS_TIMER = 5000;
 
@@ -24,24 +30,37 @@ export const getClosestTime = (d2, step, param) => {
   return ret;
 };
 
-export const dateDiff = (d1, d2, p) => {
+export const dateDiff = (d1, d2, p, h) => {
   const date1 = dayjs(d1);
   const date2 = dayjs(d2);
+  const duration = dayjs.duration(date2.diff(date1));
   const periods = ['л', 'м', 'д', 'ч', 'мин'];
   const addVal = (val, str) => (val > 0 ? val + str + ' ' : '');
 
-  const years = date1.diff(date2, 'y'),
-    months = years * 12 - date1.diff(date2, 'M'),
-    days = years * 365 - date1.diff(date2, 'd') - months * 30,
-    hours = years * 365 * 24 - date1.diff(date2, 'h') - days * 24 - months * 30 * 24,
-    minutes =
-      years * 365 * 24 * 60 -
-      date1.diff(date2, 'm') -
-      hours * 60 -
-      days * 24 * 60 -
-      months * 30 * 24 * 60;
+  //const years = date1.diff(date2, 'y'),
+  //  //months = years * 12 - date1.diff(date2, 'M'),
+  //  months = date1.diff(date2, 'M') % 12,
+  //  days = date1.diff(date2, 'd') % 30,
+  //  hours = date1.diff(date2, 'h') % 365,
+  //  minutes =
+  //    years * 365 * 24 * 60 -
+  //    date1.diff(date2, 'm') -
+  //    hours * 60 -
+  //    days * 24 * 60 -
+  //    months * 30 * 24 * 60;
 
-  const ret = [years, months, days, hours, minutes];
+  const ret = [
+    duration.$d.years,
+    duration.$d.months,
+    duration.$d.days,
+    duration.$d.hours + h,
+    duration.$d.minutes,
+  ];
+
+  //const ret = [years, months, days, hours, minutes];
+
+  // eslint-disable-next-line no-console
+  //console.log('dateDiff', date1.format(DATE_FORMAT), date2.format(DATE_FORMAT), ret, duration.$d);
 
   if (p) {
     return ret

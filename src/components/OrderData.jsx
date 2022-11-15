@@ -14,7 +14,7 @@ export const OrderData = ({ parkingData }) => {
 
     const now = dayjs();
 
-    return dateDiff(parkStart, now, true);
+    return dateDiff(parkStart, now, true, 1);
   }, [parkingData]);
 
   const number = parkingData?.car_number || '';

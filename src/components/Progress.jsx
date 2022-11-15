@@ -1,32 +1,36 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { ProgressBar } from './ProgressBar';
-import { CHECK_STATUS_TIMER, dateDiff } from '../helpers/functions';
 import dayjs from 'dayjs';
 import dayjsPluginUTC from 'dayjs-plugin-utc';
+import { ProgressBar } from './ProgressBar';
+import { CHECK_STATUS_TIMER, dateDiff } from '../helpers/functions';
+import { DATE_FORMAT } from '../api/api';
 
 dayjs.extend(dayjsPluginUTC);
 
 let updateTimer;
 let updateDurationTimer;
 
+window.dayJS = dayjs;
+
 export const Progress = ({ parkingData }) => {
-  const submissionTime = useMemo(
+  const carDeliveryTime = useMemo(
     () => (parkingData?.car_delivery_time ? dayjs(parkingData.car_delivery_time) : ''),
     [parkingData?.car_delivery_time],
   );
 
-  const submissionStart = useMemo(
+  const submissionStartedAt = useMemo(
     () => (parkingData?.started_at ? dayjs(parkingData.started_at) : ''),
     [parkingData?.started_at],
   );
 
   const submissionPeriod = useMemo(
-    () => (submissionTime && submissionStart ? submissionTime.diff(submissionStart, 's') : ''),
-    [submissionTime, submissionStart],
+    () =>
+      carDeliveryTime && submissionStartedAt ? carDeliveryTime.diff(submissionStartedAt, 's') : '',
+    [carDeliveryTime, submissionStartedAt],
   );
 
   const [submissionDuration, setSubmissionDuration] = useState(
-    submissionTime ? submissionTime.diff(dayjs(), 's') : 0,
+    submissionStartedAt ? dayjs().diff(submissionStartedAt, 's') : 0,
   );
 
   const [now, setNow] = useState(dayjs());
@@ -34,16 +38,16 @@ export const Progress = ({ parkingData }) => {
   useEffect(() => {
     clearInterval(updateDurationTimer);
 
-    if (submissionTime) {
+    if (carDeliveryTime) {
       updateDurationTimer = setInterval(() => {
-        setSubmissionDuration(submissionTime.diff(dayjs(), 's'));
+        setSubmissionDuration(dayjs().diff(submissionStartedAt, 's'));
       }, CHECK_STATUS_TIMER);
     }
 
     return () => {
       clearInterval(updateDurationTimer);
     };
-  }, [submissionTime, submissionStart]);
+  }, [carDeliveryTime, submissionStartedAt]);
 
   useEffect(() => {
     clearInterval(updateTimer);
@@ -58,12 +62,24 @@ export const Progress = ({ parkingData }) => {
   }, []);
 
   const timeLeft = useMemo(() => {
-    return dateDiff(now, submissionTime, true);
-  }, [now, submissionTime]);
+    // eslint-disable-next-line no-console
+    console.log('now', now);
+    return dateDiff(now, carDeliveryTime, true, -1);
+  }, [now, carDeliveryTime]);
 
   const percentLeft = useMemo(() => {
+    // eslint-disable-next-line no-console
+    //console.log(
+    //  'submissionDuration',
+    //  submissionDuration,
+    //  submissionPeriod,
+    //  (submissionPeriod - submissionDuration) / submissionPeriod,
+    //);
     return (100 * (submissionPeriod - submissionDuration)) / submissionPeriod;
   }, [submissionDuration, submissionPeriod]);
+
+  // процент заполнения считается как
+  // 100 - (100 * (car_delivery_time - started_at - (car_delivery_time  - сейчас)) / (car_delivery_time - started_at))
 
   return (
     <div className="order-booking">

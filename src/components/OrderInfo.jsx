@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
 import dayjs from 'dayjs';
+import dayjsPluginUTC from 'dayjs-plugin-utc';
 import { Progress } from './Progress';
 import { OrderData } from './OrderData';
-import dayjsPluginUTC from 'dayjs-plugin-utc';
 
 dayjs.extend(dayjsPluginUTC);
 
