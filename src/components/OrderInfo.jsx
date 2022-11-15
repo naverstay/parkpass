@@ -11,7 +11,7 @@ import advanced from 'dayjs/plugin/advancedFormat';
 
 dayjs.extend(timezone);
 //dayjs.extend(utc);
-dayjs.extend(dayjsPluginUTC, { parseToLocal: true });
+dayjs.extend(dayjsPluginUTC, { parseToLocal: false });
 dayjs.extend(advanced);
 
 export const OrderInfo = ({ parkingData, setOpenTimePicker, setOpenSubmissionTime }) => {

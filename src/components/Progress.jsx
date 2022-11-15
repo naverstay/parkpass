@@ -12,7 +12,7 @@ import advanced from 'dayjs/plugin/advancedFormat';
 
 dayjs.extend(timezone);
 //dayjs.extend(utc);
-dayjs.extend(dayjsPluginUTC, { parseToLocal: true });
+dayjs.extend(dayjsPluginUTC, { parseToLocal: false });
 dayjs.extend(advanced);
 
 let updateTimer;
@@ -26,15 +26,19 @@ export const Progress = ({ parkingData }) => {
     [parkingData?.car_delivery_time],
   );
 
+  const requestCreatedAt = useMemo(
+    () => (parkingData?.request?.created_at ? dayjs(parkingData.request.created_at) : ''),
+    [parkingData?.request?.created_at],
+  );
+
   const submissionStartedAt = useMemo(
     () => (parkingData?.started_at ? dayjs(parkingData.started_at) : ''),
     [parkingData?.started_at],
   );
 
   const submissionPeriod = useMemo(
-    () =>
-      carDeliveryTime && submissionStartedAt ? carDeliveryTime.diff(submissionStartedAt, 's') : '',
-    [carDeliveryTime, submissionStartedAt],
+    () => (carDeliveryTime && requestCreatedAt ? carDeliveryTime.diff(requestCreatedAt, 's') : ''),
+    [carDeliveryTime, requestCreatedAt],
   );
 
   const [submissionDuration, setSubmissionDuration] = useState(
@@ -70,28 +74,16 @@ export const Progress = ({ parkingData }) => {
   }, []);
 
   const timeLeft = useMemo(() => {
-    // eslint-disable-next-line no-console
-    console.log('now', now);
     return dateDiff(now, carDeliveryTime, true, -1);
   }, [now, carDeliveryTime]);
 
   const percentLeft = useMemo(() => {
-    // eslint-disable-next-line no-console
-    //console.log(
-    //  'submissionDuration',
-    //  submissionDuration,
-    //  submissionPeriod,
-    //  (submissionPeriod - submissionDuration) / submissionPeriod,
-    //);
-    return (100 * (submissionPeriod - submissionDuration)) / submissionPeriod;
+    return submissionDuration / submissionPeriod;
   }, [submissionDuration, submissionPeriod]);
-
-  // процент заполнения считается как
-  // 100 - (100 * (car_delivery_time - started_at - (car_delivery_time  - сейчас)) / (car_delivery_time - started_at))
 
   return (
     <div className="order-booking">
-      <ProgressBar text={'Осталось: ' + timeLeft} percent={100 - percentLeft} />
+      <ProgressBar text={'Осталось: ' + timeLeft} percent={percentLeft} />
     </div>
   );
 };

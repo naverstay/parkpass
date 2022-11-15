@@ -9,7 +9,7 @@ import advanced from 'dayjs/plugin/advancedFormat';
 import duration from 'dayjs/plugin/duration';
 
 dayjs.extend(timezone);
-dayjs.extend(dayjsPluginUTC, { parseToLocal: true });
+dayjs.extend(dayjsPluginUTC, { parseToLocal: false });
 //dayjs.extend(utc);
 dayjs.extend(advanced);
 dayjs.extend(duration);
