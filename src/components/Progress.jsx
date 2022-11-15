@@ -1,14 +1,12 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { ProgressBar } from './ProgressBar';
 import { appDayJS, CHECK_STATUS_TIMER, dateDiff } from '../helpers/functions';
-import { DATE_FORMAT } from '../api/api';
 
 let updateTimer;
-let updateDurationTimer;
-
-window.dayJS = appDayJS;
 
 export const Progress = ({ parkingData }) => {
+  const [now, setNow] = useState(appDayJS());
+
   const carDeliveryTime = useMemo(
     () => (parkingData?.car_delivery_time ? appDayJS(parkingData.car_delivery_time) : ''),
     [parkingData?.car_delivery_time],
@@ -29,25 +27,9 @@ export const Progress = ({ parkingData }) => {
     [carDeliveryTime, requestCreatedAt],
   );
 
-  const [submissionDuration, setSubmissionDuration] = useState(
-    submissionStartedAt ? appDayJS().diff(submissionStartedAt, 's') : 0,
-  );
-
-  const [now, setNow] = useState(appDayJS());
-
-  useEffect(() => {
-    clearInterval(updateDurationTimer);
-
-    if (carDeliveryTime) {
-      updateDurationTimer = setInterval(() => {
-        setSubmissionDuration(appDayJS().diff(submissionStartedAt, 's'));
-      }, CHECK_STATUS_TIMER);
-    }
-
-    return () => {
-      clearInterval(updateDurationTimer);
-    };
-  }, [carDeliveryTime, submissionStartedAt]);
+  const submissionDuration = useMemo(() => {
+    return submissionStartedAt ? now.diff(submissionStartedAt, 's') : 0;
+  }, [now, submissionStartedAt]);
 
   useEffect(() => {
     clearInterval(updateTimer);
@@ -81,6 +63,8 @@ export const Progress = ({ parkingData }) => {
   const percentLeft = useMemo(() => {
     return submissionDuration / submissionPeriod;
   }, [submissionDuration, submissionPeriod]);
+
+  // (NOW - submissionStartedAt) / (car_delivery_time - request.created_at)
 
   return <ProgressBar text={'Осталось: ' + timeLeft} percent={percentLeft} />;
 };
