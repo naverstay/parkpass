@@ -1,11 +1,18 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import dayjs from 'dayjs';
-import dayjsPluginUTC from 'dayjs-plugin-utc';
 import { ProgressBar } from './ProgressBar';
 import { CHECK_STATUS_TIMER, dateDiff } from '../helpers/functions';
 import { DATE_FORMAT } from '../api/api';
 
-dayjs.extend(dayjsPluginUTC);
+// dayjs
+import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
+//import dayjsPluginUTC from 'dayjs-plugin-utc';
+import advanced from 'dayjs/plugin/advancedFormat';
+
+dayjs.extend(timezone);
+dayjs.extend(utc);
+dayjs.extend(advanced);
 
 let updateTimer;
 let updateDurationTimer;

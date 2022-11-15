@@ -1,7 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import dayjs from 'dayjs';
-import dayjsPluginUTC from 'dayjs-plugin-utc';
 import Rolldate from '../vendor/picker.esm';
 
 import { Order } from '../components/Order';
@@ -15,7 +13,16 @@ import { PageOverlay } from '../components/PageOverlay';
 import { CHECK_STATUS_TIMER, getClosestTime } from '../helpers/functions';
 import { NoConnection } from '../components/NoConnection';
 
-dayjs.extend(dayjsPluginUTC);
+// dayjs
+import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
+//import dayjsPluginUTC from 'dayjs-plugin-utc';
+import advanced from 'dayjs/plugin/advancedFormat';
+
+dayjs.extend(timezone);
+dayjs.extend(utc);
+dayjs.extend(advanced);
 
 let rtPicker = null;
 let statusWatchInterval = 0;

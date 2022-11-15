@@ -1,10 +1,17 @@
 import React, { useMemo } from 'react';
-import dayjs from 'dayjs';
-import dayjsPluginUTC from 'dayjs-plugin-utc';
 import { Progress } from './Progress';
 import { OrderData } from './OrderData';
 
-dayjs.extend(dayjsPluginUTC);
+// dayjs
+import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
+//import dayjsPluginUTC from 'dayjs-plugin-utc';
+import advanced from 'dayjs/plugin/advancedFormat';
+
+dayjs.extend(timezone);
+dayjs.extend(utc);
+dayjs.extend(advanced);
 
 export const OrderInfo = ({ parkingData, setOpenTimePicker, setOpenSubmissionTime }) => {
   const submissionStatus = useMemo(() => {

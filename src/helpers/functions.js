@@ -1,9 +1,16 @@
-import dayjs from 'dayjs';
-import dayjsPluginUTC from 'dayjs-plugin-utc';
-import duration from 'dayjs/plugin/duration';
 import { DATE_FORMAT } from '../api/api';
 
-dayjs.extend(dayjsPluginUTC);
+// dayjs
+import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
+//import dayjsPluginUTC from 'dayjs-plugin-utc';
+import advanced from 'dayjs/plugin/advancedFormat';
+import duration from 'dayjs/plugin/duration';
+
+dayjs.extend(timezone);
+dayjs.extend(utc);
+dayjs.extend(advanced);
 dayjs.extend(duration);
 
 export const CHECK_STATUS_TIMER = 5000;
@@ -30,10 +37,10 @@ export const getClosestTime = (d2, step, param) => {
   return ret;
 };
 
-export const dateDiff = (d1, d2, p, h) => {
-  const date1 = dayjs(d1);
-  const date2 = dayjs(d2);
-  const duration = dayjs.duration(date2.diff(date1));
+export const dateDiff = (prev, next, addText, hourFix) => {
+  const datePrev = dayjs(prev);
+  const dateNext = dayjs(next).add(hourFix, 'h');
+  const duration = dayjs.duration(dateNext.diff(datePrev));
   const periods = ['л', 'м', 'д', 'ч', 'мин'];
   const addVal = (val, str) => (val > 0 ? val + str + ' ' : '');
 
@@ -53,7 +60,7 @@ export const dateDiff = (d1, d2, p, h) => {
     duration.$d.years,
     duration.$d.months,
     duration.$d.days,
-    duration.$d.hours + h,
+    duration.$d.hours,
     duration.$d.minutes,
   ];
 
@@ -62,7 +69,7 @@ export const dateDiff = (d1, d2, p, h) => {
   // eslint-disable-next-line no-console
   //console.log('dateDiff', date1.format(DATE_FORMAT), date2.format(DATE_FORMAT), ret, duration.$d);
 
-  if (p) {
+  if (addText) {
     return ret
       .map((d, di) => addVal(d, periods[di]))
       .join(' ')

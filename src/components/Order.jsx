@@ -1,11 +1,18 @@
 import React, { useEffect, useMemo, useRef } from 'react';
-import dayjs from 'dayjs';
-import dayjsPluginUTC from 'dayjs-plugin-utc';
 import { OrderData } from './OrderData';
 import { Progress } from './Progress';
 import { ProgressBar } from './ProgressBar';
 
-dayjs.extend(dayjsPluginUTC);
+// dayjs
+import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
+//import dayjsPluginUTC from 'dayjs-plugin-utc';
+import advanced from 'dayjs/plugin/advancedFormat';
+
+dayjs.extend(timezone);
+dayjs.extend(utc);
+dayjs.extend(advanced);
 
 export const Order = ({
   parkingData,
