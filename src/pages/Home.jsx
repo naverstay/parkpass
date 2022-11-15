@@ -64,11 +64,23 @@ export const Home = ({ windowScrollTop }) => {
       // todo
       apiFetchGet('get/?id=' + VCID + '&P=' + P)
         .then((d) => {
+          setOpenNoData(false);
           setOpenConnectionError(false);
-          // eslint-disable-next-line no-console
-          console.log('fetch get', d);
+          const deliveryTime = appDayJS(d.car_delivery_time);
 
+          // eslint-disable-next-line no-console
+          console.log(
+            'fetch get',
+            d,
+            deliveryTime.utcOffset(),
+            appDayJS().add(deliveryTime.utcOffset(), 'm').isAfter(deliveryTime),
+          );
+
+          //if (appDayJS().add(deliveryTime.utcOffset(), 'm').isAfter(deliveryTime)) {
+          //  setOpenNoData(true);
+          //} else {
           setParkingData(d);
+          //}
         })
         .catch((e) => {
           setOpenConnectionError(true);

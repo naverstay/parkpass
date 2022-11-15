@@ -57,14 +57,19 @@ export const Progress = ({ parkingData }) => {
     return dateDiff(now.add(carDeliveryTime.utcOffset(), 'm'), carDeliveryTime, true, -1);
   }, [now, carDeliveryTime]);
 
-  // eslint-disable-next-line no-console
-  //console.log('submissionPeriod', submissionDuration, submissionPeriod);
-
   const percentLeft = useMemo(() => {
     return submissionDuration / submissionPeriod;
   }, [submissionDuration, submissionPeriod]);
 
   // (NOW - submissionStartedAt) / (car_delivery_time - request.created_at)
 
-  return <ProgressBar text={'Осталось: ' + timeLeft} percent={percentLeft} />;
+  // eslint-disable-next-line no-console
+  //console.log('submissionPeriod', percentLeft, submissionDuration, submissionPeriod);
+
+  return (
+    <ProgressBar
+      text={timeLeft ? 'Осталось: ' + timeLeft : 'Время вышло'}
+      percent={timeLeft ? percentLeft : 100}
+    />
+  );
 };
