@@ -19,12 +19,17 @@ export const Progress = ({ parkingData, now }) => {
   );
 
   const submissionPeriod = useMemo(
-    () => (carDeliveryTime && requestCreatedAt ? carDeliveryTime.diff(requestCreatedAt, 's') : ''),
+    () =>
+      carDeliveryTime && requestCreatedAt
+        ? carDeliveryTime.diff(requestCreatedAt.add(carDeliveryTime.utcOffset(), 'm'), 's')
+        : '',
     [carDeliveryTime, requestCreatedAt],
   );
 
   const submissionDuration = useMemo(() => {
-    return carDeliveryTime ? carDeliveryTime.diff(now, 's') : 0;
+    return carDeliveryTime
+      ? carDeliveryTime.diff(now.add(carDeliveryTime.utcOffset(), 'm'), 's')
+      : 0;
   }, [now, carDeliveryTime]);
 
   const timeLeft = useMemo(() => {
@@ -42,7 +47,7 @@ export const Progress = ({ parkingData, now }) => {
   }, [now, carDeliveryTime]);
 
   const percentLeft = useMemo(() => {
-    return (100 * submissionDuration) / submissionPeriod;
+    return submissionDuration / submissionPeriod;
   }, [submissionDuration, submissionPeriod]);
 
   // (NOW - submissionStartedAt) / (car_delivery_time - request.created_at)
@@ -53,7 +58,7 @@ export const Progress = ({ parkingData, now }) => {
   return (
     <ProgressBar
       text={timeLeft ? 'Осталось: ' + timeLeft : 'Время вышло'}
-      percent={timeLeft ? 100 - percentLeft : 100}
+      percent={timeLeft ? 100 * (1 - percentLeft) : 100}
     />
   );
 };
