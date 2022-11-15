@@ -28,8 +28,8 @@ export const Progress = ({ parkingData }) => {
   );
 
   const submissionDuration = useMemo(() => {
-    return submissionStartedAt ? now.diff(submissionStartedAt, 's') : 0;
-  }, [now, submissionStartedAt]);
+    return carDeliveryTime ? carDeliveryTime.diff(now, 's') : 0;
+  }, [now, carDeliveryTime]);
 
   useEffect(() => {
     clearInterval(updateTimer);
@@ -58,18 +58,18 @@ export const Progress = ({ parkingData }) => {
   }, [now, carDeliveryTime]);
 
   const percentLeft = useMemo(() => {
-    return submissionDuration / submissionPeriod;
+    return (100 * submissionDuration) / submissionPeriod;
   }, [submissionDuration, submissionPeriod]);
 
   // (NOW - submissionStartedAt) / (car_delivery_time - request.created_at)
 
   // eslint-disable-next-line no-console
-  //console.log('submissionPeriod', percentLeft, submissionPeriod, submissionPeriod);
+  console.log('submissionPeriod', submissionDuration, submissionPeriod);
 
   return (
     <ProgressBar
       text={timeLeft ? 'Осталось: ' + timeLeft : 'Время вышло'}
-      percent={timeLeft ? 100 - percentLeft : 100}
+      percent={timeLeft ? percentLeft : 100}
     />
   );
 };
