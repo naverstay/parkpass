@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { ProgressBar } from './ProgressBar';
-import { appDayJS, CHECK_STATUS_TIMER, dateDiff } from '../helpers/functions';
+import { appDayJS, dateDiff } from '../helpers/functions';
 
 export const Progress = ({ parkingData, now }) => {
   const carDeliveryTime = useMemo(
@@ -53,7 +53,7 @@ export const Progress = ({ parkingData, now }) => {
   // (NOW - submissionStartedAt) / (car_delivery_time - request.created_at)
 
   // eslint-disable-next-line no-console
-  console.log('submissionPeriod', submissionDuration, submissionPeriod);
+  //console.log('submissionPeriod', submissionDuration, submissionPeriod);
 
   return (
     <ProgressBar

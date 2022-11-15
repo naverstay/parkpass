@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import { API_URL, apiFetchGet, apiFetchPost, DATE_FORMAT, fixtures, MEDIA_URL } from '../api/api';
+import { apiFetchGet, apiFetchPost, fixtures } from '../api/api';
 
 import { Rating } from '../components/Rating';
 import { NoData } from '../components/NoData';

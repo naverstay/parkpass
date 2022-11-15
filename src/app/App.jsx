@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { Home } from '../pages/Home';
-import { useWindowDimension } from '../hooks/useWindowDimension';
+//import { useWindowDimension } from '../hooks/useWindowDimension';
 import '../styles/main.scss';
 
 import ArrowRight from '../ico/arrow_r.svg';

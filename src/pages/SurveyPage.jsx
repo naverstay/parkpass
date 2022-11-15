@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { API_URL, apiFetchGet, fixtures, MEDIA_URL } from '../api/api';
+import { apiFetchGet, fixtures } from '../api/api';
 import { Header } from '../components/Header';
 import { Survey } from '../components/Survey';
 import { NoData } from '../components/NoData';

@@ -1,17 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import Rolldate from '../vendor/picker.esm';
 
 import { Order } from '../components/Order';
-import {
-  API_URL,
-  apiFetchGet,
-  apiFetchPost,
-  DATE_FORMAT,
-  fixtures,
-  MEDIA_URL,
-  SERVER_DATE_FORMAT,
-} from '../api/api';
+import { apiFetchGet, apiFetchPost, DATE_FORMAT, fixtures, SERVER_DATE_FORMAT } from '../api/api';
 import { Header } from '../components/Header';
 import { Submission } from '../components/Submission';
 import { SubmissionTime } from '../components/SubmissionTime';

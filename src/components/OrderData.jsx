@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { DATE_FORMAT, MEDIA_URL } from '../api/api';
+import { MEDIA_URL } from '../api/api';
 import { appDayJS, dateDiff } from '../helpers/functions';
 
 export const OrderData = ({ parkingData, now }) => {

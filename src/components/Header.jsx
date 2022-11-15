@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { MEDIA_URL } from '../api/api';
 
 const maxHeight = 360;
