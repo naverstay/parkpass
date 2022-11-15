@@ -7,11 +7,12 @@ import { ProgressBar } from './ProgressBar';
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
-//import dayjsPluginUTC from 'dayjs-plugin-utc';
+import dayjsPluginUTC from 'dayjs-plugin-utc';
 import advanced from 'dayjs/plugin/advancedFormat';
 
 dayjs.extend(timezone);
-dayjs.extend(utc);
+dayjs.extend(dayjsPluginUTC, { parseToLocal: true });
+//dayjs.extend(utc);
 dayjs.extend(advanced);
 
 export const Order = ({

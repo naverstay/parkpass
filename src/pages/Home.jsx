@@ -17,11 +17,12 @@ import { NoConnection } from '../components/NoConnection';
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
-//import dayjsPluginUTC from 'dayjs-plugin-utc';
+import dayjsPluginUTC from 'dayjs-plugin-utc';
 import advanced from 'dayjs/plugin/advancedFormat';
 
 dayjs.extend(timezone);
-dayjs.extend(utc);
+//dayjs.extend(utc);
+dayjs.extend(dayjsPluginUTC, { parseToLocal: true });
 dayjs.extend(advanced);
 
 let rtPicker = null;

@@ -4,12 +4,13 @@ import { DATE_FORMAT } from '../api/api';
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
-//import dayjsPluginUTC from 'dayjs-plugin-utc';
+import dayjsPluginUTC from 'dayjs-plugin-utc';
 import advanced from 'dayjs/plugin/advancedFormat';
 import duration from 'dayjs/plugin/duration';
 
 dayjs.extend(timezone);
-dayjs.extend(utc);
+dayjs.extend(dayjsPluginUTC, { parseToLocal: true });
+//dayjs.extend(utc);
 dayjs.extend(advanced);
 dayjs.extend(duration);
 
@@ -39,7 +40,7 @@ export const getClosestTime = (d2, step, param) => {
 
 export const dateDiff = (prev, next, addText, hourFix) => {
   const datePrev = dayjs(prev);
-  const dateNext = dayjs(next).add(hourFix, 'h');
+  const dateNext = dayjs(next);
   const duration = dayjs.duration(dateNext.diff(datePrev));
   const periods = ['л', 'м', 'д', 'ч', 'мин'];
   const addVal = (val, str) => (val > 0 ? val + str + ' ' : '');
