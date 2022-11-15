@@ -73,13 +73,17 @@ export const dateDiff = (datePrev, dateNext, addText, hourFix) => {
   //    days * 24 * 60 -
   //    months * 30 * 24 * 60;
 
-  const ret = [
+  let ret = [
     duration.$d.years,
     duration.$d.months,
     duration.$d.days,
     duration.$d.hours,
     duration.$d.minutes,
   ];
+
+  if (ret.reduce((acc, v) => acc + v, 0) === 0 && duration.$d.seconds > 0) {
+    ret[4] = 1;
+  }
 
   //const ret = [years, months, days, hours, minutes];
 

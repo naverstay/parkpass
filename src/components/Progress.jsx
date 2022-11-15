@@ -28,9 +28,7 @@ export const Progress = ({ parkingData }) => {
   );
 
   const submissionDuration = useMemo(() => {
-    return carDeliveryTime
-      ? carDeliveryTime.diff(now.add(carDeliveryTime.utcOffset(), 'm'), 's')
-      : 0;
+    return carDeliveryTime ? carDeliveryTime.diff(now, 's') : 0;
   }, [now, carDeliveryTime]);
 
   useEffect(() => {
