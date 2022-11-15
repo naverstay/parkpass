@@ -1,18 +1,6 @@
 import React from 'react';
 import { DATE_FORMAT } from '../api/api';
-import { getClosestTime } from '../helpers/functions';
-
-// dayjs
-import dayjs from 'dayjs';
-import timezone from 'dayjs/plugin/timezone';
-import utc from 'dayjs/plugin/utc';
-import dayjsPluginUTC from 'dayjs-plugin-utc';
-import advanced from 'dayjs/plugin/advancedFormat';
-
-dayjs.extend(timezone);
-//dayjs.extend(utc);
-dayjs.extend(dayjsPluginUTC, { parseToLocal: false });
-dayjs.extend(advanced);
+import { appDayJS, getClosestTime } from '../helpers/functions';
 
 export const SubmissionTime = ({
   setOpenSubmissionTime,
@@ -42,7 +30,7 @@ export const SubmissionTime = ({
           onClick={() => {
             setOpenSubmissionTime(false);
             rtPicker
-              .setDate(getClosestTime(dayjs().add(10, 'm'), 5, 'm').format(DATE_FORMAT))
+              .setDate(getClosestTime(appDayJS().add(10, 'm'), 5, 'm').format(DATE_FORMAT))
               .render();
 
             sendBookRequest();

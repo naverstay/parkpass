@@ -2,18 +2,7 @@ import React, { useEffect, useMemo, useRef } from 'react';
 import { OrderData } from './OrderData';
 import { Progress } from './Progress';
 import { ProgressBar } from './ProgressBar';
-
-// dayjs
-import dayjs from 'dayjs';
-import timezone from 'dayjs/plugin/timezone';
-import utc from 'dayjs/plugin/utc';
-import dayjsPluginUTC from 'dayjs-plugin-utc';
-import advanced from 'dayjs/plugin/advancedFormat';
-
-dayjs.extend(timezone);
-dayjs.extend(dayjsPluginUTC, { parseToLocal: false });
-//dayjs.extend(utc);
-dayjs.extend(advanced);
+import { appDayJS } from '../helpers/functions';
 
 export const Order = ({
   parkingData,
@@ -42,7 +31,7 @@ export const Order = ({
   }, [parkingData?.state]);
 
   const submissionTime = useMemo(() => {
-    return parkingData?.car_delivery_time ? dayjs(parkingData.car_delivery_time) : '';
+    return parkingData?.car_delivery_time ? appDayJS(parkingData.car_delivery_time) : '';
   }, [parkingData]);
 
   useEffect(() => {
@@ -73,7 +62,9 @@ export const Order = ({
               <div className="order-info">
                 <div className="order-info__item">
                   <p>Время подачи Авто:</p>
-                  <div className="order-info__time">{submissionTime.format('HH:mm')}</div>
+                  <div className="order-info__time">
+                    {submissionTime.utcOffset(0).format('HH:mm')}
+                  </div>
                 </div>
                 <div className="order-info__item">
                   <p>Статус подачи</p>

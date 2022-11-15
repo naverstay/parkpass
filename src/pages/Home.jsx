@@ -3,33 +3,29 @@ import { Link, useSearchParams } from 'react-router-dom';
 import Rolldate from '../vendor/picker.esm';
 
 import { Order } from '../components/Order';
-import { API_URL, apiFetchGet, apiFetchPost, DATE_FORMAT, fixtures, MEDIA_URL } from '../api/api';
+import {
+  API_URL,
+  apiFetchGet,
+  apiFetchPost,
+  DATE_FORMAT,
+  fixtures,
+  MEDIA_URL,
+  SERVER_DATE_FORMAT,
+} from '../api/api';
 import { Header } from '../components/Header';
 import { Submission } from '../components/Submission';
 import { SubmissionTime } from '../components/SubmissionTime';
 import { NoData } from '../components/NoData';
 import { DevBlock } from '../components/DevBlock';
 import { PageOverlay } from '../components/PageOverlay';
-import { CHECK_STATUS_TIMER, getClosestTime } from '../helpers/functions';
+import { appDayJS, CHECK_STATUS_TIMER, getClosestTime } from '../helpers/functions';
 import { NoConnection } from '../components/NoConnection';
-
-// dayjs
-import dayjs from 'dayjs';
-import timezone from 'dayjs/plugin/timezone';
-import utc from 'dayjs/plugin/utc';
-import dayjsPluginUTC from 'dayjs-plugin-utc';
-import advanced from 'dayjs/plugin/advancedFormat';
-
-dayjs.extend(timezone);
-//dayjs.extend(utc);
-dayjs.extend(dayjsPluginUTC, { parseToLocal: false });
-dayjs.extend(advanced);
 
 let rtPicker = null;
 let statusWatchInterval = 0;
 
 export const Home = ({ windowScrollTop }) => {
-  const now = dayjs();
+  const now = appDayJS();
   const pickerInputRef = useRef(null);
   const rollDateRef = useRef(null);
   const [pickerMode, setPickerMode] = useState('today');
@@ -50,13 +46,17 @@ export const Home = ({ windowScrollTop }) => {
   }, [searchParams]);
 
   const sendBookRequest = useCallback(() => {
-    apiFetchPost({ date: dayjs(rtPicker.getDate()).format(DATE_FORMAT), id: VCID }, 'book/').then(
-      (r) => {
-        // eslint-disable-next-line no-console
-        console.log('sendBookRequest', r);
-        setParkingData(r);
-      },
-    );
+    apiFetchPost(
+      { date: appDayJS(rtPicker.getDate()).format(SERVER_DATE_FORMAT), id: VCID },
+      'book/',
+    ).then((r) => {
+      // eslint-disable-next-line no-console
+      console.log('sendBookRequest', r);
+
+      r.car_delivery_time = r.car_delivery_time.split(' ').join('T') + ':00z';
+
+      setParkingData(r);
+    });
   }, [VCID]);
 
   useEffect(() => {
@@ -85,14 +85,14 @@ export const Home = ({ windowScrollTop }) => {
     console.log(
       'submissionDate',
       submissionDate,
-      submissionDate && submissionDate.format(DATE_FORMAT),
+      submissionDate && submissionDate.utcOffset(0).format(DATE_FORMAT),
     );
 
-    const time = dayjs();
-    let date = submissionDate || dayjs();
+    const time = appDayJS();
+    let date = submissionDate || appDayJS();
 
     if (date.diff(time, 'm') < 10) {
-      date = getClosestTime(dayjs().add(10, 'm'), 5, 'm');
+      date = getClosestTime(appDayJS().add(10, 'm'), 5, 'm');
     }
 
     rtPicker?.setDate(date.format(DATE_FORMAT)).render();
@@ -101,7 +101,7 @@ export const Home = ({ windowScrollTop }) => {
   useEffect(() => {
     rtPicker
       ?.setDate(
-        dayjs()
+        appDayJS()
           .add(pickerMode === 'today' ? 0 : 1, 'd')
           .format(DATE_FORMAT),
       )
@@ -144,7 +144,7 @@ export const Home = ({ windowScrollTop }) => {
   }, [parkingData, startStatusWatching]);
 
   useEffect(() => {
-    const targetTime = dayjs().add(1, 'hour');
+    const targetTime = appDayJS().add(1, 'hour');
 
     const lang = {
       title: '',
@@ -175,7 +175,7 @@ export const Home = ({ windowScrollTop }) => {
         },
         inline: true,
         format: DATE_FORMAT,
-        value: targetTime.format(DATE_FORMAT),
+        value: targetTime.utcOffset(0).format(DATE_FORMAT),
         //beginYear: targetTime.format('YYYY'),
         //endYear: parseInt(targetTime.format('YYYY')) + 1,
         //init: function (e) {
@@ -270,12 +270,12 @@ export const Home = ({ windowScrollTop }) => {
               onSubmit={() => {
                 // eslint-disable-next-line no-console
 
-                const time = dayjs();
-                const date = dayjs(rtPicker.getDate());
+                const time = appDayJS();
+                const date = appDayJS(rtPicker.getDate());
 
                 if (date.diff(time, 'm') < 10) {
                   rtPicker
-                    .setDate(getClosestTime(dayjs().add(10, 'm'), 5, 'm').format(DATE_FORMAT))
+                    .setDate(getClosestTime(appDayJS().add(10, 'm'), 5, 'm').format(DATE_FORMAT))
                     .render();
                   setPickerMode('today');
                   return false;

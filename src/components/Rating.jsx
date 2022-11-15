@@ -83,9 +83,7 @@ export const Rating = ({ parkingData }) => {
         </div>
       </div>
 
-      <div className="order-booking">
-        <Progress parkingData={parkingData} />
-      </div>
+      <Progress parkingData={parkingData} />
     </div>
   );
 };

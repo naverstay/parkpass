@@ -1,29 +1,25 @@
-import React, { useMemo } from 'react';
-import { MEDIA_URL } from '../api/api';
-import { dateDiff } from '../helpers/functions';
-
-// dayjs
-import dayjs from 'dayjs';
-import timezone from 'dayjs/plugin/timezone';
-import utc from 'dayjs/plugin/utc';
-import dayjsPluginUTC from 'dayjs-plugin-utc';
-import advanced from 'dayjs/plugin/advancedFormat';
-
-dayjs.extend(timezone);
-//dayjs.extend(utc);
-dayjs.extend(dayjsPluginUTC, { parseToLocal: false });
-dayjs.extend(advanced);
+import React, { useMemo, useState } from 'react';
+import { DATE_FORMAT, MEDIA_URL } from '../api/api';
+import { appDayJS, dateDiff } from '../helpers/functions';
 
 export const OrderData = ({ parkingData }) => {
+  const [now, setNow] = useState(appDayJS());
+
   const parkDuration = useMemo(() => {
-    const parkStart = parkingData?.started_at ? dayjs(parkingData.started_at) : '';
+    const parkStart = parkingData?.started_at ? appDayJS(parkingData.started_at) : '';
 
     if (!parkStart) return '';
 
-    const now = dayjs();
+    // eslint-disable-next-line no-console
+    //console.log(
+    //  'parkDuration',
+    //  now.format(DATE_FORMAT),
+    //  parkStart.format(DATE_FORMAT),
+    //  now.diff(parkStart, 'm'),
+    //);
 
-    return dateDiff(parkStart, now, true, 1);
-  }, [parkingData]);
+    return dateDiff(parkStart, now.add(parkStart.utcOffset(), 'm'), true, 1);
+  }, [parkingData, now]);
 
   const number = parkingData?.car_number || '';
   const model = parkingData?.car_model || '';
@@ -35,7 +31,7 @@ export const OrderData = ({ parkingData }) => {
   const parkPlace = parkingData?.parking_place || '';
   const price = (parkingData?.debt || '0.00') + ' ₽';
   const startTime = parkingData?.started_at
-    ? dayjs(parkingData.started_at).format('DD.MM.YYYY в HH:mm')
+    ? appDayJS(parkingData.started_at).utcOffset(0).format('DD.MM.YYYY в HH:mm')
     : '';
 
   const valetCard = parkingData?.valet_card_id || '';

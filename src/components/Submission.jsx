@@ -1,17 +1,6 @@
 import React from 'react';
 import { DATE_FORMAT } from '../api/api';
-
-// dayjs
-import dayjs from 'dayjs';
-import timezone from 'dayjs/plugin/timezone';
-import utc from 'dayjs/plugin/utc';
-import dayjsPluginUTC from 'dayjs-plugin-utc';
-import advanced from 'dayjs/plugin/advancedFormat';
-
-dayjs.extend(timezone);
-//dayjs.extend(utc);
-dayjs.extend(dayjsPluginUTC, { parseToLocal: false });
-dayjs.extend(advanced);
+import { appDayJS } from '../helpers/functions';
 
 export const Submission = ({
   pickerMode,
@@ -22,7 +11,7 @@ export const Submission = ({
   rollDateRef,
   onSubmit,
 }) => {
-  const now = dayjs();
+  const now = appDayJS();
 
   return (
     <div className="submission">
@@ -63,7 +52,7 @@ export const Submission = ({
       <div className={'submission-time'}>
         <input
           ref={pickerInputRef}
-          defaultValue={now.format(DATE_FORMAT)}
+          defaultValue={now.utcOffset(0).format(DATE_FORMAT)}
           className="hidden"
           type="text"
         />
