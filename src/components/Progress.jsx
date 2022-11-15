@@ -28,7 +28,9 @@ export const Progress = ({ parkingData }) => {
   );
 
   const submissionDuration = useMemo(() => {
-    return carDeliveryTime ? carDeliveryTime.diff(now, 's') : 0;
+    return carDeliveryTime
+      ? carDeliveryTime.diff(now.add(carDeliveryTime.utcOffset(), 'm'), 's')
+      : 0;
   }, [now, carDeliveryTime]);
 
   useEffect(() => {
@@ -69,7 +71,7 @@ export const Progress = ({ parkingData }) => {
   return (
     <ProgressBar
       text={timeLeft ? 'Осталось: ' + timeLeft : 'Время вышло'}
-      percent={timeLeft ? percentLeft : 100}
+      percent={timeLeft ? 100 - percentLeft : 100}
     />
   );
 };
