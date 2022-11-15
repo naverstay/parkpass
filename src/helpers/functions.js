@@ -1,21 +1,17 @@
-import { DATE_FORMAT } from '../api/api';
-
 // dayjs
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
-import dayjsPluginUTC from 'dayjs-plugin-utc';
 import advanced from 'dayjs/plugin/advancedFormat';
 import duration from 'dayjs/plugin/duration';
 
 dayjs.extend(timezone);
 dayjs.extend(utc, { keepLocalTime: false });
-//dayjs.extend(dayjsPluginUTC, { parseToLocal: true });
 dayjs.extend(advanced);
 dayjs.extend(duration);
 
 // eslint-disable-next-line no-console
-console.log('utcOffset', dayjs().utcOffset(), dayjs().isUTC());
+//console.log('utcOffset', dayjs().utcOffset(), dayjs().isUTC());
 
 export const appDayJS = dayjs;
 
