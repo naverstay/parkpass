@@ -5,6 +5,7 @@ import { ProgressBar } from './ProgressBar';
 import { appDayJS } from '../helpers/functions';
 
 export const Order = ({
+  now,
   parkingData,
   setOpenSubmissionTime,
   setOpenTimePicker,
@@ -84,7 +85,7 @@ export const Order = ({
               </div>
             </div>
 
-            <OrderData parkingData={parkingData} />
+            <OrderData now={now} parkingData={parkingData} />
 
             {submissionTime ? null : (
               <div className="order-info__help">
@@ -95,13 +96,13 @@ export const Order = ({
             )}
           </>
         ) : (
-          <OrderData parkingData={parkingData} />
+          <OrderData now={now} parkingData={parkingData} />
         )}
       </div>
 
       <div className="order-booking">
         {[4, 5, 6].indexOf(state) > -1 ? (
-          <Progress parkingData={parkingData} />
+          <Progress now={now} parkingData={parkingData} />
         ) : state === 7 ? (
           <ProgressBar percent={100} text={submissionStatus} />
         ) : state > 7 ? null : (

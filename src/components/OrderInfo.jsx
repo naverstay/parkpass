@@ -3,7 +3,7 @@ import { Progress } from './Progress';
 import { OrderData } from './OrderData';
 import { appDayJS } from '../helpers/functions';
 
-export const OrderInfo = ({ parkingData, setOpenTimePicker, setOpenSubmissionTime }) => {
+export const OrderInfo = ({ parkingData, setOpenTimePicker, setOpenSubmissionTime, now }) => {
   const submissionStatus = useMemo(() => {
     const STATUSES = [
       'Автомобиль принят',
@@ -59,7 +59,7 @@ export const OrderInfo = ({ parkingData, setOpenTimePicker, setOpenSubmissionTim
           </div>
         </div>
 
-        <OrderData parkingData={parkingData} />
+        <OrderData now={now} parkingData={parkingData} />
 
         {submissionTime ? null : (
           <div className="order-info__help">

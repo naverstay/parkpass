@@ -11,7 +11,7 @@ import Clock from '../ico/clock.svg';
 import Info from '../ico/info.svg';
 import { SurveyPage } from '../pages/SurveyPage';
 import { RatingPage } from '../pages/RatingPage';
-import { getScrollTop } from '../helpers/functions';
+import { appDayJS, CHECK_STATUS_TIMER, getScrollTop } from '../helpers/functions';
 
 const svgData = 'url("data:image/svg+xml,';
 
@@ -41,6 +41,8 @@ const appHeight = () => {
   doc.style.setProperty('--app-height', `${Math.max(200, window.innerHeight - sab)}px`);
 };
 
+let updateTimer;
+
 export const App = () => {
   //const windowSize = useWindowDimension().join(',');
   //useEffect(() => {
@@ -52,11 +54,19 @@ export const App = () => {
     setWindowScrollTop(getScrollTop());
   };
 
+  const [now, setNow] = useState(appDayJS());
+
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
+    clearInterval(updateTimer);
+
+    updateTimer = setInterval(() => {
+      setNow(appDayJS());
+    }, CHECK_STATUS_TIMER);
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      clearInterval(updateTimer);
     };
   }, []);
 
@@ -65,9 +75,15 @@ export const App = () => {
       <style>{css}</style>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home windowScrollTop={windowScrollTop} />} />
-          <Route path="/survey" element={<SurveyPage windowScrollTop={windowScrollTop} />} />
-          <Route path="/rating" element={<RatingPage windowScrollTop={windowScrollTop} />} />
+          <Route path="/" element={<Home now={now} windowScrollTop={windowScrollTop} />} />
+          <Route
+            path="/survey"
+            element={<SurveyPage now={now} windowScrollTop={windowScrollTop} />}
+          />
+          <Route
+            path="/rating"
+            element={<RatingPage now={now} windowScrollTop={windowScrollTop} />}
+          />
         </Routes>
       </BrowserRouter>
     </div>

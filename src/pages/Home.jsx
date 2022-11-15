@@ -24,8 +24,7 @@ import { NoConnection } from '../components/NoConnection';
 let rtPicker = null;
 let statusWatchInterval = 0;
 
-export const Home = ({ windowScrollTop }) => {
-  const now = appDayJS();
+export const Home = ({ windowScrollTop, now }) => {
   const pickerInputRef = useRef(null);
   const rollDateRef = useRef(null);
   const [pickerMode, setPickerMode] = useState('today');
@@ -239,6 +238,7 @@ export const Home = ({ windowScrollTop }) => {
           {parkingData ? (
             <div className="container">
               <Order
+                now={now}
                 windowScrollTop={windowScrollTop}
                 parkingData={parkingData}
                 setOpenTimePicker={setOpenTimePicker}

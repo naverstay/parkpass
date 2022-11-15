@@ -7,7 +7,7 @@ import { NoData } from '../components/NoData';
 import { PageOverlay } from '../components/PageOverlay';
 import { NoConnection } from '../components/NoConnection';
 
-export const SurveyPage = ({ windowScrollTop }) => {
+export const SurveyPage = ({ windowScrollTop, now }) => {
   const [openSurvey, setOpenSurvey] = useState(false);
   const [openRatings, setOpenRatings] = useState(false);
   const [openNoData, setOpenNoData] = useState(false);

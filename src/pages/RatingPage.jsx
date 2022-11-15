@@ -9,7 +9,7 @@ import { PageOverlay } from '../components/PageOverlay';
 import { Header } from '../components/Header';
 import { NoConnection } from '../components/NoConnection';
 
-export const RatingPage = ({ windowScrollTop }) => {
+export const RatingPage = ({ windowScrollTop, now }) => {
   const [openRating, setOpenRating] = useState(false);
   const [openNoData, setOpenNoData] = useState(false);
   const [openConnectionError, setOpenConnectionError] = useState(false);

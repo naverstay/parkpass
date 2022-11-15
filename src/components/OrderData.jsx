@@ -2,9 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { DATE_FORMAT, MEDIA_URL } from '../api/api';
 import { appDayJS, dateDiff } from '../helpers/functions';
 
-export const OrderData = ({ parkingData }) => {
-  const [now, setNow] = useState(appDayJS());
-
+export const OrderData = ({ parkingData, now }) => {
   const parkDuration = useMemo(() => {
     const parkStart = parkingData?.started_at ? appDayJS(parkingData.started_at) : '';
 

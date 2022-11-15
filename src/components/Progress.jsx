@@ -2,11 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { ProgressBar } from './ProgressBar';
 import { appDayJS, CHECK_STATUS_TIMER, dateDiff } from '../helpers/functions';
 
-let updateTimer;
-
-export const Progress = ({ parkingData }) => {
-  const [now, setNow] = useState(appDayJS());
-
+export const Progress = ({ parkingData, now }) => {
   const carDeliveryTime = useMemo(
     () => (parkingData?.car_delivery_time ? appDayJS(parkingData.car_delivery_time) : ''),
     [parkingData?.car_delivery_time],
@@ -30,18 +26,6 @@ export const Progress = ({ parkingData }) => {
   const submissionDuration = useMemo(() => {
     return carDeliveryTime ? carDeliveryTime.diff(now, 's') : 0;
   }, [now, carDeliveryTime]);
-
-  useEffect(() => {
-    clearInterval(updateTimer);
-
-    updateTimer = setInterval(() => {
-      setNow(appDayJS());
-    }, CHECK_STATUS_TIMER);
-
-    return () => {
-      clearInterval(updateTimer);
-    };
-  }, []);
 
   const timeLeft = useMemo(() => {
     // eslint-disable-next-line no-console

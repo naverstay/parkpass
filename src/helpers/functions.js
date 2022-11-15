@@ -47,7 +47,7 @@ export const dateDiff = (datePrev, dateNext, addText, hourFix) => {
   //const datePrev = dayjs(prev);
   //const dateNext = dayjs(next);
   const duration = dayjs.duration(dateNext.diff(datePrev));
-  const periods = ['л', 'м', 'д', 'ч', 'мин'];
+  const periods = ['л', 'м', 'д', 'ч', 'мин', 'сек'];
   const addVal = (val, str) => (val > 0 ? val + str + ' ' : '');
 
   //const years = datePrev.diff(dateNext, 'y'),
@@ -82,7 +82,7 @@ export const dateDiff = (datePrev, dateNext, addText, hourFix) => {
   ];
 
   if (ret.reduce((acc, v) => acc + v, 0) === 0 && duration.$d.seconds > 0) {
-    ret[4] = 1;
+    ret.push(~~(duration.$d.seconds / 5) * 5);
   }
 
   //const ret = [years, months, days, hours, minutes];
