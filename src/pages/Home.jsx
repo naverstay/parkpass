@@ -44,7 +44,9 @@ export const Home = ({ windowScrollTop, now }) => {
       // eslint-disable-next-line no-console
       console.log('sendBookRequest', r);
 
-      r.car_delivery_time = r.car_delivery_time.split(' ').join('T') + ':00z';
+      if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/.test(r.car_delivery_time)) {
+        r.car_delivery_time = r.car_delivery_time.split(' ').join('T') + ':00z';
+      }
 
       setParkingData(r);
     });
@@ -57,21 +59,17 @@ export const Home = ({ windowScrollTop, now }) => {
         .then((d) => {
           setOpenNoData(false);
           setOpenConnectionError(false);
-          const deliveryTime = appDayJS(d.car_delivery_time);
+          //const deliveryTime = appDayJS(d.car_delivery_time);
+          //
+          //// eslint-disable-next-line no-console
+          //console.log(
+          //  'fetch get',
+          //  d,
+          //  deliveryTime.utcOffset(),
+          //  appDayJS().add(deliveryTime.utcOffset(), 'm').isAfter(deliveryTime),
+          //);
 
-          // eslint-disable-next-line no-console
-          console.log(
-            'fetch get',
-            d,
-            deliveryTime.utcOffset(),
-            appDayJS().add(deliveryTime.utcOffset(), 'm').isAfter(deliveryTime),
-          );
-
-          //if (appDayJS().add(deliveryTime.utcOffset(), 'm').isAfter(deliveryTime)) {
-          //  setOpenNoData(true);
-          //} else {
           setParkingData(d);
-          //}
         })
         .catch((e) => {
           setOpenConnectionError(true);
@@ -85,11 +83,11 @@ export const Home = ({ windowScrollTop, now }) => {
 
   useEffect(() => {
     // eslint-disable-next-line no-console
-    console.log(
-      'submissionDate',
-      submissionDate,
-      submissionDate && submissionDate.utcOffset(0).format(DATE_FORMAT),
-    );
+    //console.log(
+    //  'submissionDate',
+    //  submissionDate,
+    //  submissionDate && submissionDate.utcOffset(0).format(DATE_FORMAT),
+    //);
 
     const time = appDayJS();
     let date = submissionDate || appDayJS();
@@ -209,7 +207,7 @@ export const Home = ({ windowScrollTop, now }) => {
 
   return (
     <>
-      <DevBlock />
+      {/*<DevBlock />*/}
       {/* todo remove DevBlock */}
       <Header windowScrollTop={windowScrollTop} parkingData={parkingData} />
 
